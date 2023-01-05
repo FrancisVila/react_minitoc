@@ -1,15 +1,17 @@
 // add following line if new file
-import React, { useEffect } from 'react'
-import '../App.css'
+import React, { useEffect, useState } from 'react'
+import './minitoc.css'
 import $ from 'jquery'
+import tocIcon from './table-of-contents-icon-10.png'
 
 export const MiniToc = () => {
+  const [folded_, folded_set] = useState(false)
+
   useEffect(() => {
     $(() => {
       let headerLevel_old = 0
       let tocItem_old = $('#minitoc_root')
       let headerPath = [tocItem_old]
-      console.log(`currentHeaderPath=${headerPath}`)
       // TODO handle case where no h1 tag exists in the page, or several h1 tags
       $('#content')
         .find('h1, h2,h3,h4')
@@ -71,7 +73,7 @@ export const MiniToc = () => {
         const docViewTop = $(window).scrollTop()
         const docViewBottom = docViewTop + $(window).height()
         $('#content')
-          .find('h3,h4,h5,h6,h7,h8,h9')
+          .find('h3,h4,h5')
           .each(function () {
             const elemTop = $(this).offset().top
             const thisId = $(this).attr('id')
@@ -96,9 +98,20 @@ export const MiniToc = () => {
     return Number(tagName.substring(1))
   }
 
+  const foldedOrNot = () => {
+    const f = folded_ ? 'folded' : ''
+    const ret = 'minitoc ' + f
+    console.log(ret)
+    return ret
+  }
+
+  const handleOpenClose = () => {
+    folded_set(!folded_)
+  }
+
   return (
-    <div className='minitoc'>
-      <p>In this page:</p>
+    <div className={foldedOrNot()}>
+      <p onClick={handleOpenClose}>In this page:</p>
       <div id='minitoc_root'></div>
     </div>
   )
