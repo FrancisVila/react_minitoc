@@ -1,0 +1,55 @@
+
+.minitoc.folded {
+	transform: rotate(90deg);
+	transform-origin: left top;
+	padding: 0;
+	position: fixed;
+    top: 100px;
+    left: calc(100% - 50px);
+    white-space: nowrap;
+	
+}
+
+.minitoc.folded p {
+	line-height: 0;
+	padding-left: 3px;
+	padding-right: 3px;
+	
+}
+
+
+
+
+.minitoc.folded li {
+	display:none
+}
+
+
+.minitoc {
+	position:fixed;
+
+	top:0;
+	right:0;
+	
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.minitoc a {
+	color: #ffffff;
+	text-decoration: none;
+}
+.minitoc li {
+	list-style-type: none; 
+}
+
+.minitoc a:hover {
+	text-decoration: underline;
+}
+
+.outOfView {display:none}
+
+
+#minitoc_root  ul {padding-left:20px}
+
+#minitoc_root > ul {padding-left:0}
