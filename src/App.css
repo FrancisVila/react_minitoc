@@ -3,23 +3,32 @@
 }
 
 .minitoc {
-	position:absolute;
-	width: 300px;
-	height: 300px;
+	position:fixed;
+
 	top:0;
 	right:0;
 	background-color: #444;
 	padding-left: 10px;
+	padding-right: 10px;
 }
 
 .minitoc a {
 	color: #ffffff;
 	text-decoration: none;
 }
+.minitoc li {
+	list-style-type: none; 
+}
 
 .minitoc a:hover {
 	text-decoration: underline;
 }
+
+#minitoc_root  ul {padding-left:20px}
+
+#minitoc_root > ul {padding-left:0}
+
+
 
 .App-logo {
   height: 40vmin;
