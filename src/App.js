@@ -9,7 +9,7 @@ function App () {
     <div className='App'>
       <header className='App-header'>
         <MiniToc></MiniToc>
-        <Page2></Page2>
+        <Page1></Page1>
       </header>
     </div>
   )

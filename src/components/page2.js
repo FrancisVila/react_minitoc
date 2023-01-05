@@ -6,7 +6,7 @@ export const Page2 = () => {
     <div id='content'>
       <h1 id='aaaa'>Big Title</h1>
       <h4 id='bbbb'>In anim </h4>
-      <h3 id='cccc'>Sunt cupidatat </h3>
+      <h2 id='cccc'>Sunt cupidatat </h2>
       <p>
         In anim irure elit sit officia cillum quis culpa sunt aliqua do. Ex
         fugiat mollit voluptate dolore consequat Lorem aliquip consequat
