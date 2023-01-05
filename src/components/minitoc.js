@@ -6,72 +6,70 @@ import $ from 'jquery'
 export const MiniToc = () => {
   useEffect(() => {
     $(() => {
-      let currentLevel_old = 0
-      let currentItem_old = $('#minitoc_root')
-      let currentHeaderPath = [currentItem_old]
-      console.log(`currentHeaderPath=${currentHeaderPath}`)
+      let headerLevel_old = 0
+      let tocItem_old = $('#minitoc_root')
+      let headerPath = [tocItem_old]
+      console.log(`currentHeaderPath=${headerPath}`)
       // TODO handle case where no h1 tag exists in the page, or several h1 tags
       $('#content')
         .find('h1, h2,h3,h4')
         .each(function () {
-          var $currentPageItem = $(this)
-          const tagName = $currentPageItem[0].tagName
+          var $pageItem = $(this)
+          const tagName = $pageItem[0].tagName
           console.log(tagName)
-          const currentLevel = getCurrentLevel(tagName)
-          var currentId = $currentPageItem.attr('id')
+          const headerLevel = getHeaderLevel(tagName)
+          var currentId = $pageItem.attr('id')
           var $li = $('<li/>')
           var $a = $('<a/>', {
-            text: $currentPageItem.text(),
+            text: $pageItem.text(),
             href: '#' + currentId,
-            title: $currentPageItem.text()
+            title: $pageItem.text()
           })
           $li = $('<li/>')
           $a = $('<a/>', {
-            text: $currentPageItem.text(),
+            text: $pageItem.text(),
             href: '#' + currentId,
-            title: $currentPageItem.text()
+            title: $pageItem.text()
           })
           $a.appendTo($li)
-          currentId = $currentPageItem.attr('id')
-          let $currentParent
+          currentId = $pageItem.attr('id')
+          let $tocParent
           let $ul
-          console.log(currentHeaderPath)
+          console.log(headerPath)
           // ex: from H2 > H3
-          if (currentLevel > currentLevel_old) {
-            $currentParent = currentHeaderPath[currentHeaderPath.length - 1]
-            console.log($currentParent)
+          if (headerLevel > headerLevel_old) {
+            $tocParent = headerPath[headerPath.length - 1]
+            console.log($tocParent)
             $ul = $('<ul/>')
 
-            $currentParent.append($ul)
+            $tocParent.append($ul)
             $ul.append($li)
-            currentHeaderPath.push($li)
+            headerPath.push($li)
           }
           // ex: from H4 to H2
-          if (currentLevel < currentLevel_old) {
-            currentHeaderPath = currentHeaderPath.slice(0, currentLevel + 1)
-            $currentParent = currentHeaderPath[currentHeaderPath.length - 1]
-            currentHeaderPath.push($li)
-            $currentParent.append($li)
+          if (headerLevel < headerLevel_old) {
+            headerPath = headerPath.slice(0, headerLevel + 1)
+            $tocParent = headerPath[headerPath.length - 1]
+            headerPath.push($li)
+            $tocParent.append($li)
           }
           // ex: from H3 to H3
-          if (currentLevel === currentLevel_old) {
-            $currentParent = currentHeaderPath[
-              currentHeaderPath.length - 1
-            ].parent()
-            currentHeaderPath.pop()
+          if (headerLevel === headerLevel_old) {
+            $tocParent = headerPath[headerPath.length - 1].parent()
+            headerPath.pop()
             // $currentParent = currentHeaderPath[currentHeaderPath.length - 1]
-            currentHeaderPath.push($li)
-            $currentParent.append($li)
+            headerPath.push($li)
+            $tocParent.append($li)
           }
-          console.log(currentHeaderPath.length, $li.text())
-          currentId = $currentPageItem.attr('id')
+          console.log(headerPath.length, $li.text())
+          currentId = $pageItem.attr('id')
 
-          currentLevel_old = currentLevel
+          headerLevel_old = headerLevel
         })
     })
   }, [])
 
-  const getCurrentLevel = tagName => {
+  const getHeaderLevel = tagName => {
     return Number(tagName.substring(1))
   }
 
