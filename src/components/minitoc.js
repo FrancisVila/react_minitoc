@@ -66,6 +66,29 @@ export const MiniToc = () => {
 
           headerLevel_old = headerLevel
         })
+
+      $(window).on('scroll', () => {
+        const docViewTop = $(window).scrollTop()
+        const docViewBottom = docViewTop + $(window).height()
+        $('#content')
+          .find('h3,h4,h5,h6,h7,h8,h9')
+          .each(function () {
+            const elemTop = $(this).offset().top
+            const thisId = $(this).attr('id')
+            const thisTocElem = $(`[href="#${thisId}"]`)
+            console.log(thisTocElem)
+            if (elemTop > docViewBottom || elemTop < docViewTop) {
+              $(thisTocElem)
+                // .parent()
+                .addClass('outOfView')
+              // .removeClass('inView')
+            } else
+              $(thisTocElem)
+                // .parent()
+                .removeClass('outOfView')
+            // .addClass('inView')
+          })
+      })
     })
   }, [])
 

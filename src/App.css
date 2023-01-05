@@ -23,6 +23,7 @@
 .minitoc a:hover {
 	text-decoration: underline;
 }
+.outOfView {display:none}
 
 #minitoc_root  ul {padding-left:20px}
 
