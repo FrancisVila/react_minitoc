@@ -85,7 +85,7 @@ export const MiniToc = () => {
 				console.log(pageWidth)
 				console.log('Table in view!!', domElemTopRight.tagName.toLowerCase())}
 		else $('#minitoc').show()
-		// console.log("ZZZZZZZZZZZZZ")
+		// console.log("ZZZZZZZZZZZZZ") 
         $("#content")
           .find("h3,h4,h5")
           .each(function () {
