@@ -1751,7 +1751,7 @@ export const Page1 = () => {
         dolore velit. Fugiat velit quis dolor aute consequat laborum elit ad
         quis excepteur nulla sunt et. Id aliquip ex laborum duis et magna velit.
       </p>
-      <h1>Cum salvum esse flentes</h1>
+      <h2>Cum salvum esse flentes</h2>
 
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Prioris generis est docilitas, memoria; Hoc tu nunc in illo probas. Duo Reges: constructio interrete. Et quod est munus, quod opus sapientiae? </p>
 
@@ -1793,7 +1793,7 @@ export const Page1 = () => {
 </ul>
 
 
-<h1>Isto modo ne improbos quidem, si essent boni viri.</h1>
+<h2>Isto modo ne improbos quidem, si essent boni viri.</h2>
 
 <p>Sic consequentibus vestris sublatis prima tolluntur. Respondeat totidem verbis. Cyrenaici quidem non recusant; Gloriosa ostentatio in constituendo summo bono. Quis istud possit, inquit, negare? Mihi enim satis est, ipsis non satis. Proclivi currit oratio. Ea possunt paria non esse. </p>
 

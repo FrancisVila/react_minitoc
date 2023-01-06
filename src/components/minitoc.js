@@ -16,7 +16,7 @@ export const MiniToc = () => {
 		const windowHeight = $(window).height();
 		const docViewBottom = docViewTop + windowHeight;
 		
-		console.log('docViewBottom=', docViewBottom)
+		// console.log('docViewBottom=', docViewBottom)
 		const pageWidth = $("#root")[0].offsetWidth
 		const tagsToHideToc = ['table', 'tr', 'td', 'th', 'tbody', 'thead', 'img']
 		console.log("1234567890")
@@ -35,7 +35,7 @@ export const MiniToc = () => {
 					const rightTagName = domElemRight.tagName.toLowerCase()
 					if ((tagsToHideToc.includes(rightTagName))  )
 						somethingClashWithToC = true
-						console.log(rightTagName)
+						// console.log(rightTagName)
 					}
 			}
 		
@@ -55,7 +55,7 @@ export const MiniToc = () => {
 		  }
 
 
-		hideTocIfAppropriate()
+		// hideTocIfAppropriate()
       let headerLevel_old = 0;
       let $tocItem_root = $("#minitoc_root");
       // headerPath is an array of jQuery elements from the ToC giving the path to the currently processed header from the page
@@ -111,20 +111,43 @@ export const MiniToc = () => {
       // hides ToC elements H3 and above for page elements not in view of the reader
       $(window).on("scroll", () => {
 		// console.log("AAAAAAAAAAAAAA")
-		hideTocIfAppropriate()
+		// hideTocIfAppropriate()
 		// console.log("ZZZZZZZZZZZZZ") 
-        $("#content")
-          .find("h3,h4,h5")
-          .each(function () {
-            var $pageElem = $(this);
-            const pageElemTop = $pageElem.offset().top;
-            const pageElemId = $pageElem.attr("id");
+		let  numberToShow = 0;
+		let numberToHide = 0;
+		let totalNumber = 0
+		$("h3")
+		.each( (toto) => {
+			console.log(toto)
+			const $pageElem = $(this);
+			
+			const pageElemId = $(this).attr("id");
             const $tocElem = $('[href="#' + pageElemId + '"]');
-            // console.log($tocElem);
-            if (pageElemTop > docViewBottom || pageElemTop < docViewTop) {
-              $($tocElem).addClass("outOfView");
-            } else $($tocElem).removeClass("outOfView");
-          });
+			console.log("$tocElem=", $tocElem)
+			$tocElem.addClass("outOfView")
+			totalNumber++
+		})
+        // $("h3,h4,h5")
+        //   .each( () => {
+        //     const $pageElem = $(this);
+		// 	const off = $pageElem.offset()
+		// 	if (off){
+		// 	//	console.log("$pageElem=", $pageElem)
+        //     const pageElemTop = off.top;
+        //     const pageElemId = $pageElem.attr("id");
+        //     const $tocElem = $('[href="#' + pageElemId + '"]');
+        //     // console.log($tocElem);
+        //     if (pageElemTop > docViewBottom || pageElemTop < docViewTop) {
+        //       $($tocElem).addClass("outOfView");
+		// 	  numberToHide++
+        //     } 
+		// 	else {$($tocElem).removeClass("outOfView");}
+		// numberToShow++
+		// }
+        //   });
+		  console.log('numberToHide=', numberToHide)
+		  console.log('numberToShow=', numberToShow)
+		  console.log('totalNumber=', totalNumber)
       });
 
 
