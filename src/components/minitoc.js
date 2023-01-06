@@ -12,7 +12,50 @@ export const MiniToc = () => {
     // variables starting with "$page" represent elements from the page
     // varialbes starting with "$toc" represent element from the ToC
     $(() => {
+		const docViewTop = $(window).scrollTop();
+		const windowHeight = $(window).height();
+		const docViewBottom = docViewTop + windowHeight;
+		
+		console.log('docViewBottom=', docViewBottom)
+		const pageWidth = $("#root")[0].offsetWidth
+		const tagsToHideToc = ['table', 'tr', 'td', 'th', 'tbody', 'thead', 'img']
 		console.log("1234567890")
+		const hideTocIfAppropriate =()=> {
+			// alert( (document.elementFromPoint(pageWidth-10,0)).toString())
+			let somethingClashWithToC = false
+			console.log('===========================')
+			for(let y=0 ; y < windowHeight; y=y+10) {
+				
+				const domElemRight = document.elementFromPoint(pageWidth-250,y)
+				
+				if (domElemRight )
+					{
+					// console.log("domElemRight=", domElemRight, 'y=',y,)
+						
+					const rightTagName = domElemRight.tagName.toLowerCase()
+					if ((tagsToHideToc.includes(rightTagName))  )
+						somethingClashWithToC = true
+						console.log(rightTagName)
+					}
+			}
+		
+			// const domElemTopRight = document.elementFromPoint(pageWidth-10,0)
+			// // const domElemBottomRight = document.elementFromPoint(pageWidth-10,docViewTop-10)
+			// const domElemBottomRight = document.elementFromPoint(pageWidth-10,500)
+			// // console.log(domElemTopRight)
+			// const topRightTagName = domElemTopRight.tagName.toLowerCase()
+			// const bottomRightTagName = domElemBottomRight.tagName.toLowerCase()
+		
+			if (somethingClashWithToC)
+				{
+					$('#minitoc').hide()
+					// console.log(pageWidth)
+				}
+			else $('#minitoc').show()
+		  }
+
+
+		hideTocIfAppropriate()
       let headerLevel_old = 0;
       let $tocItem_root = $("#minitoc_root");
       // headerPath is an array of jQuery elements from the ToC giving the path to the currently processed header from the page
@@ -68,23 +111,7 @@ export const MiniToc = () => {
       // hides ToC elements H3 and above for page elements not in view of the reader
       $(window).on("scroll", () => {
 		// console.log("AAAAAAAAAAAAAA")
-        const docViewTop = $(window).scrollTop();
-        const docViewBottom = docViewTop + $(window).height();
-		const pageWidth = $("#root")[0].offsetWidth
-		// alert( (document.elementFromPoint(pageWidth-10,0)).toString())
-		const domElemTopRight = document.elementFromPoint(pageWidth-10,0)
-		// const domElemBottomRight = document.elementFromPoint(pageWidth-10,docViewTop-10)
-		const domElemBottomRight = document.elementFromPoint(pageWidth-10,500)
-		// console.log(domElemTopRight)
-		const topRightTagName = domElemTopRight.tagName.toLowerCase()
-		const bottomRightTagName = domElemBottomRight.tagName.toLowerCase()
-
-		if (( topRightTagName  !== 'header' && topRightTagName  !== 'html') || (bottomRightTagName  !== 'header' && bottomRightTagName  !== 'html'))
-			{
-				$('#minitoc').hide()
-				console.log(pageWidth)
-				console.log('Table in view!!', domElemTopRight.tagName.toLowerCase())}
-		else $('#minitoc').show()
+		hideTocIfAppropriate()
 		// console.log("ZZZZZZZZZZZZZ") 
         $("#content")
           .find("h3,h4,h5")
@@ -99,8 +126,13 @@ export const MiniToc = () => {
             } else $($tocElem).removeClass("outOfView");
           });
       });
+
+
+
     });
   }, []);
+
+
 
   // turns any string into a valid id, and attributes that id to a jQuery element
   const sluggify = (s, elem) => {
