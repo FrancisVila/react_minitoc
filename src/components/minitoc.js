@@ -55,7 +55,7 @@ export const MiniToc = () => {
 		  }
 
 
-		// hideTocIfAppropriate()
+	 hideTocIfAppropriate()
       let headerLevel_old = 0;
       let $tocItem_root = $("#minitoc_root");
       // headerPath is an array of jQuery elements from the ToC giving the path to the currently processed header from the page
@@ -111,12 +111,12 @@ export const MiniToc = () => {
       // hides ToC elements H3 and above for page elements not in view of the reader
       $(window).on("scroll", () => {
 		// console.log("AAAAAAAAAAAAAA")
-		// hideTocIfAppropriate()
+		 hideTocIfAppropriate()
 		// console.log("ZZZZZZZZZZZZZ") 
 		let  numberToShow = 0;
 		let numberToHide = 0;
 		let totalNumber = 0
-		$("h3")
+		$("h3,h4,h5")
 		.each( (toto) => {
 			console.log(toto)
 			const $pageElem = $(this);
