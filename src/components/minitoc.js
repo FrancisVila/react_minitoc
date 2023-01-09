@@ -108,20 +108,19 @@ export const MiniToc = () => {
         let numberToHide = 0
         let totalNumber = 0
         $('#content')
-          .find('h3,h4,h5')
-          .each(toto => {
-            const $pageElem = $(this)
-            console.log('$pageElem', $pageElem)
-            const pageElemId = $(this).attr('id')
+          .find('h3, h4')
+          .each(function ()  {
+            const domPageElem = $(this)[0]
+            console.log('domPageElem', domPageElem)
+            const pageElemId = domPageElem['id']
             const $tocElem = $('[href="#' + pageElemId + '"]')
             console.log('$tocElem=', $tocElem)
             $tocElem.addClass('outOfView')
             totalNumber++
-            const off = $pageElem.offset()
+            const off = domPageElem.offset()
             if (off) {
-              //	console.log("$pageElem=", $pageElem)
+              //	console.log("domPageElem=", domPageElem)
               const pageElemTop = off.top
-              const pageElemId = $pageElem.attr('id')
               const $tocElem = $('[href="#' + pageElemId + '"]')
               // console.log($tocElem);
               if (pageElemTop > docViewBottom || pageElemTop < docViewTop) {
