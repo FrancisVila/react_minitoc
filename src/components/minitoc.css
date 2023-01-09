@@ -51,7 +51,8 @@
 
 .outOfView {display:none}
 
-
+/* using this to pass values from react to jquery */
+.passValueFromReactToJquery {display:none} 
 #minitoc_root  ul {padding-left:20px}
 
 #minitoc_root > ul {padding-left:0}

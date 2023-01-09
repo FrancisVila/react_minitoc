@@ -4,7 +4,9 @@ import './minitoc.css'
 import $ from 'jquery'
 
 export const MiniToc = (
-
+	 levelsToShow = 5, // in the toc show headers h1, h2, h3, h4
+	 widthInPageForToc = 250, // if there's any table or image 250px from the right edge, hide the ToC)
+	 tagsToHideToc = "'table', 'tr', 'td', 'th', 'tbody', 'thead', 'img'" // hide the toc if one of these elements appears
 ) => {
   // state variables end in "_" (underscore), state edit functions end in "_set"
   const [folded_, folded_set] = useState(false)
@@ -27,7 +29,7 @@ export const MiniToc = (
 				// console.log("ZZZZZZZZZZZZZ")
 				hideAllOrPartOfToc()
 			  })
-		const levelsToShow = 4 // in the toc show headers h1, h2, h3, h4
+		const levelsToShow = 5 // in the toc show headers h1, h2, h3, h4
 		const widthInPageForToc = 250 // if there's any table or image 250px from the right edge, hide the ToC)
 		const tagsToHideToc = ['table', 'tr', 'td', 'th', 'tbody', 'thead', 'img'] // hide the toc if one of these elements appears
 	  
@@ -231,6 +233,12 @@ export const MiniToc = (
 
   return (
     <div id='minitoc' className={foldedOrNotCSS()}>
+	<p id="levelsToShow" className='passValueFromReactToJquery'>{levelsToShow.toString()}</p>  
+	<p id="widthInPageForToc" className='passValueFromReactToJquery'>{widthInPageForToc.toString()}</p> 
+	<p id="tagsToHideToc" className='passValueFromReactToJquery'>{tagsToHideToc.toString()}</p>
+	
+
+
       <p onClick={handleOpenClose}>In this page: {openCloseIcon()}</p>
 
       <div id='minitoc_root'></div>
