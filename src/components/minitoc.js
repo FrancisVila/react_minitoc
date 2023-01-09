@@ -11,11 +11,14 @@ export const MiniToc = () => {
     // in jQuery: jQuery elements start with "$"
     // variables starting with "$page" represent elements from the page
     // varialbes starting with "$toc" represent element from the ToC
-    $(() => {
-      const docViewTop = $(window).scrollTop()
-      const windowHeight = $(window).height()
-      const docViewBottom = docViewTop + windowHeight
+	const docViewTop = () => $(window).scrollTop()
+	const windowHeight = () => $(window).height()
+	const docViewBottom = () => docViewTop() + windowHeight()
 
+    $(() => {
+      
+      
+	  
       // console.log('docViewBottom=', docViewBottom)
       const pageWidth = $('#root')[0].offsetWidth
       const tagsToHideToc = ['table', 'tr', 'td', 'th', 'tbody', 'thead', 'img']
@@ -108,32 +111,32 @@ export const MiniToc = () => {
         let numberToHide = 0
         let totalNumber = 0
         $('#content')
-          .find('h3, h4')
+          .find('h3,h4')
           .each(function ()  {
             const domPageElem = $(this)[0]
-            console.log('domPageElem', domPageElem)
+			const offsetTop = this.offsetTop
+			const $pageElem = $(this)
+            // console.log('domPageElem', domPageElem)
             const pageElemId = domPageElem['id']
-            const $tocElem = $('[href="#' + pageElemId + '"]')
-            console.log('$tocElem=', $tocElem)
+			const $tocElem = $('[href="#' + pageElemId + '"]')
+            // console.log('$tocElem=', $tocElem)
             $tocElem.addClass('outOfView')
             totalNumber++
-            const off = domPageElem.offset()
-            if (off) {
               //	console.log("domPageElem=", domPageElem)
-              const pageElemTop = off.top
-              const $tocElem = $('[href="#' + pageElemId + '"]')
+              
               // console.log($tocElem);
-              if (pageElemTop > docViewBottom || pageElemTop < docViewTop) {
+              if (offsetTop > docViewBottom() || offsetTop < docViewTop()) {
+				console.log(pageElemId, offsetTop)
                 $($tocElem).addClass('outOfView')
                 numberToHide++
+				console.log(docViewTop(), docViewBottom(), pageElemId, offsetTop, numberToHide)
               } else {
                 $($tocElem).removeClass('outOfView')
               }
               numberToShow++
-            }
-            console.log('numberToHide=', numberToHide)
-            console.log('numberToShow=', numberToShow)
-            console.log('totalNumber=', totalNumber)
+            // console.log('numberToHide=', numberToHide)
+            // console.log('numberToShow=', numberToShow)
+            // console.log('totalNumber=', totalNumber)
           })
 
       }
