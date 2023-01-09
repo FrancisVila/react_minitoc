@@ -163,15 +163,16 @@ export const MiniToc = (
             const pageElemId = domPageElem['id']
 			const $tocElem = $('[href="#' + pageElemId + '"]')
             // console.log('$tocElem=', $tocElem)
-            $tocElem.addClass('outOfView')
+            $tocElem.parent().addClass('outOfView')
               //	console.log("domPageElem=", domPageElem)
               
               // console.log($tocElem);
               if (offsetTop > docViewBottom() || offsetTop < docViewTop()) {
 				console.log(pageElemId, offsetTop)
-                $($tocElem).addClass('outOfView')
+                $($tocElem).parent().addClass('outOfView')
               } else {
-                $($tocElem).removeClass('outOfView')
+                $($tocElem).parent().removeClass('outOfView')
+				$($tocElem).parentsUntil("div").removeClass('outOfView')
               }
           })
 
