@@ -12,31 +12,34 @@ export const Page1 = () => {
 	  <h2>FAQ</h2>
     <ul>
 		<li>
-		<b>Why does the ToC appear twice</b>?<br/>
-        If you see the ToC appear <b>twice</b> here, it is because here you are viewing it in development mode. Once the component is built, it only appears once.
-        See -
-        <a href="https://stackoverflow.com/questions/72238175/why-useeffect-running-twice-and-how-to-handle-it-well-in-react"> 
+		<b>Q: Why does the ToC appear twice</b>?
+        <p>If you see the ToC appear <b>twice</b> here, it is because here you are viewing it in development mode. Once the component is built, it only appears once. </p>
+		<p>If you are inside Axway, see  <a href="http://10.128.58.228/minitoc/"> this demo </a> for a production-type display.
           this StackOverflow answer
-        </a> -
-        for an explanation of the phenomenon.
+		  <br/>See -
+        <a href="https://stackoverflow.com/questions/72238175/why-useeffect-running-twice-and-how-to-handle-it-well-in-react">  this StackOverflow answer </a> -
+        for an explanation of the phenomenon.</p>
 		</li>
 		<li>
-		<b>How about the problem of wide tables and images?</b><br/>
-        <b>Scroll downwards</b>, you will see that the ToC seamlessly disappears when a wide table or image appears.
+		<b>Q: How about the problem of wide tables and images?</b>
+        <p><b>Scroll downwards</b>, you will see that the ToC seamlessly disappears when a wide table or image appears.</p>
 		</li>
 		<li>
-		<b>How does the ToC react to scrolling?</b><br/>
-        .
+		<b>Q: Which headers does the ToC show, when visible?</b>
+        <p>The current logic is to show all h1 and h2, plus all headers currently visible in the scrolled window, plus any headers in between, up to h5. 
+		For example, if a single h4 is visible, you will see all h1 + all h2 + the h3 parent of the visible h4 plus the h4 itself. Feel free to express your views about this.</p>
+		</li>
+		<li>
+		
+		<b>Q: Why did Zoomin mean about compatibility of the ToC with React?</b>
+
+		<p>The best tool for dynamically building html when the user scrolls is called jQuery. </p>
+		<p>Back in the day (say until 2015) jQuery was widely used for building web interfaces. Since then, most of jQuery's uses have been replaced by React. But some cases, such as building html from an existing page on scroll, are better suited to jQuery.</p>
+		<p>When React was young, there were a lot of questions like "how do I get my existing jQuery to work in React", and the answer was usually that there was a better "React" way of doing it. The Minitoc is an exception.</p>
+		<p>Getting jQuery to work with React is a bit tricky - despite them both being based in Javascript - because they use opposite logics. jQuery starts from an existing html page and attaches interactivity, a bit like CSS starts from a page and adds styling. React on the contrary centers on the values of a set of code variables (known as the state) and translates that into an html interface. In React, user input, such as clicking on a button, selecting in a list, or typing in an form, triggers handler functions that modify the state variables that in turn translates into changes in the interface.</p>
 		</li>
 	</ul>
-	  <p><b>Why does the ToC appear twice</b>?<br/>
-        If you see the ToC appear <b>twice</b> here, it is because here you are viewing it in development mode. Once the component is built, it only appears once.
-        See -
-        <a href="https://stackoverflow.com/questions/72238175/why-useeffect-running-twice-and-how-to-handle-it-well-in-react"> 
-          this StackOverflow answer
-        </a> -
-        for an explanation of the phenomenon.
-      </p>
+	  
       <h2 id="bbbb">In anim </h2>
 
 

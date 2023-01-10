@@ -20,8 +20,11 @@ export const MiniToc = ({
     const docViewTop = () => $(window).scrollTop()
     const windowHeight = () => $(window).height()
     const docViewBottom = () => $(window).scrollTop() + $(window).height()
-
+	var minitocLeftStart = $("#minitoc").offset().left;
+		console.log('minitocLeftStart', minitocLeftStart)
+	
     $(() => {
+		
       // retrieve react parameters from invisible html tags (see JSX components in component's "render" return)
       const levelsToShow = Number($('#levelsToShow').text()) // in the toc show headers h1, h2, h3, h4
       const widthInPageForToc = Number($('#widthInPageForToc').text()) // if there's any table or image 250px from the right edge, hide the ToC)
@@ -32,6 +35,15 @@ export const MiniToc = ({
         console.log('AAAAAAAAAAAAAA', d.getTime())
 		console.log('scroll ====================================')
         // console.log("ZZZZZZZZZZZZZ")
+        hideAllOrPartOfToc()
+      })
+
+	  $(window).on('resize', () => {
+        const d = new Date()
+        console.log('AAAAAAAAAAAAAA', d.getTime())
+		console.log('resize ====================================')
+        // console.log("ZZZZZZZZZZZZZ")
+		minitocLeftStart = $("#minitoc").offset().left;
         hideAllOrPartOfToc()
       })
 
@@ -65,37 +77,37 @@ export const MiniToc = ({
       const pageWidth = $('#root')[0].offsetWidth
       console.log('1234567890')
 
-      const somethingClashWithToC = () => {
-        // alert( (document.elementFromPoint(pageWidth-10,0)).toString())
-        let ret = false
-        console.log('entering somethingClashWithToC=')
-        // scan the page displayed in the browser (apparent to the user) from top to bottom
-		var minitocLeftStart = $("#minitoc").offset().left;
-        for (let y = 0; y < windowHeight(); y = y + 10) {
+    //   const somethingClashWithToC = () => {
+    //     // alert( (document.elementFromPoint(pageWidth-10,0)).toString())
+    //     let ret = false
+    //     console.log('entering somethingClashWithToC=')
+    //     // scan the page displayed in the browser (apparent to the user) from top to bottom
+	// 	var minitocLeftStart = $("#minitoc").offset().left;
+    //     for (let y = 0; y < windowHeight(); y = y + 10) {
           
-		  const domElemRight = document.elementFromPoint (minitocLeftStart-20,y)
-          if (domElemRight) {
-            // console.log("domElemRight=", domElemRight, 'y=',y,)
+	// 	  const domElemRight = document.elementFromPoint (minitocLeftStart-20,y)
+    //       if (domElemRight) {
+    //         // console.log("domElemRight=", domElemRight, 'y=',y,)
 			
-            const rightTagName = domElemRight.tagName.toLowerCase()
-            if (tagsToHideToc.includes(rightTagName)) 
-				{
-				console.log(domElemRight, "ret equals true")
-				ret= true
-				break
-			}
-            console.log('rightTagName', rightTagName)
-          }
-        }
+    //         const rightTagName = domElemRight.tagName.toLowerCase()
+    //         if (tagsToHideToc.includes(rightTagName)) 
+	// 			{
+	// 			console.log(domElemRight, "ret equals true")
+	// 			ret= true
+	// 			break
+	// 		}
+    //         console.log('rightTagName', rightTagName)
+    //       }
+    //     }
 
-        // const domElemTopRight = document.elementFromPoint(pageWidth-10,0)
-        // // const domElemBottomRight = document.elementFromPoint(pageWidth-10,docViewTop-10)
-        // const domElemBottomRight = document.elementFromPoint(pageWidth-10,500)
-        // // console.log(domElemTopRight)
-        // const topRightTagName = domElemTopRight.tagName.toLowerCase()
-        // const bottomRightTagName = domElemBottomRight.tagName.toLowerCase()
-        return ret
-      }
+    //     // const domElemTopRight = document.elementFromPoint(pageWidth-10,0)
+    //     // // const domElemBottomRight = document.elementFromPoint(pageWidth-10,docViewTop-10)
+    //     // const domElemBottomRight = document.elementFromPoint(pageWidth-10,500)
+    //     // // console.log(domElemTopRight)
+    //     // const topRightTagName = domElemTopRight.tagName.toLowerCase()
+    //     // const bottomRightTagName = domElemBottomRight.tagName.toLowerCase()
+    //     return ret
+    //   }
       // initial build of the ToC
       const buildToc = () => {
         let headerLevel_old = 0
@@ -190,23 +202,25 @@ export const MiniToc = ({
       // hide all or part of the toc
       const hideAllOrPartOfToc = () => {
         let somethingClashWithToc = false
-        console.log('entering somethingClashWithToC=')
+        console.log('entering hideAllOrPartOfToc=')
         // scan the page displayed in the browser (apparent to the user) from top to bottom
-		var minitocLeftStart = $("#minitoc").offset().left;
+		
         for (let y = 0; y < windowHeight(); y = y + 10) {
-          
-		  const domElemRight = document.elementFromPoint (minitocLeftStart-20,y)
+			const domElemRight = document.elementFromPoint (minitocLeftStart-20,y)
+		  
+		  console.log('domElemRight, minitocLeftStart,  y ==', domElemRight, minitocLeftStart, y)
           if (domElemRight) {
             // console.log("domElemRight=", domElemRight, 'y=',y,)
 			
             const rightTagName = domElemRight.tagName.toLowerCase()
+			console.log('rightTagName', rightTagName)
             if (tagsToHideToc.includes(rightTagName)) 
 				{
 				console.log(domElemRight, "ret equals true")
 				somethingClashWithToc= true
 				
 			}
-            console.log('rightTagName', rightTagName)
+            
           }
         }
         if (somethingClashWithToc) {
