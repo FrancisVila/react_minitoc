@@ -1,3 +1,21 @@
+<h2>FAQ</h2>
+	  <h3>Q: What is this demo trying to prove?</h3>
+	  <p>This demo shows a React component that builds a table of contents of a page. The component is compatible with any React-based site containing html headers and some space to the right. More specifically, Zoomin can drop it anywhere in the React code of the Axway doc portal (introduced in November 2022).</p>
+	  <p>You can view the source code of the minitoc React component <a href="https://codesandbox.io/s/live-retractable-toc-for-documentation-g4zv99?file=/src/components/minitoc.js">on this codesandbox</a>. 
+	  </p>
+	  <h3>Q: How about the problem of wide tables and images?</h3>
+        <p><b>Scroll downwards</b> in the demo, you will see that the ToC seamlessly disappears when a wide table or image appears.</p>
+		<h3>Q: I see the ToC twice, WTF?</h3>
+        <p>If you see the ToC appear <b>twice</b> here, it is because here you are viewing it in development mode. Once the component is built, it only appears once. </p>
+		<p>If you are inside Axway, see  <a href="http://10.128.58.228/minitoc/"> this demo </a> for a production-type display, without the double-ToC effect.
+		  See 
+        <a href="https://stackoverflow.com/questions/72238175/why-useeffect-running-twice-and-how-to-handle-it-well-in-react">  this StackOverflow answer </a> 
+        for an explanation of the phenomenon.</p>
+		<h3>Q: Which headers does the ToC show, when visible?</h3>
+        <p>The current logic is to show all h1 and h2, plus all headers up to h5 currently visible in the scrolled window, plus any headers in between. 
+		For example, if a single h4 is visible, you will see [all h1] + [all h2] + the [h3] parent of the visible h4, plus the [h4] itself. </p>
+		<p>Feel free to express any views you might have about this.</p>
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
