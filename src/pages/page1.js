@@ -8,90 +8,48 @@ export const Page1 = () => {
     <div id='content'>
 
 <h1 id="aaaa">Scroll down to view effect on ToC</h1>
-      <p>Click on "In this page" to hide the ToC</p>
+      <p>Click on "In this page" to hide the ToC </p>
 	  <h2>FAQ</h2>
-    <ul>
-		<li>
-		<b>Q: Why does the ToC appear twice</b>?
-        <p>If you see the ToC appear <b>twice</b> here, it is because here you are viewing it in development mode. Once the component is built, it only appears once. </p>
-		<p>If you are inside Axway, see  <a href="http://10.128.58.228/minitoc/"> this demo </a> for a production-type display.
-          this StackOverflow answer
-		  <br/>See -
-        <a href="https://stackoverflow.com/questions/72238175/why-useeffect-running-twice-and-how-to-handle-it-well-in-react">  this StackOverflow answer </a> -
-        for an explanation of the phenomenon.</p>
-		</li>
-		<li>
-		<b>Q: How about the problem of wide tables and images?</b>
+	  <h3>Q: What is this demo trying to prove?</h3>
+	  <p>This demo shows a React component that builds a table of contents of a page. The component is compatible with any React-based site containing html headers and some space to the right. More specifically, Zoomin can drop it anywhere in the React code of the Axway doc portal (introduced in November 2022).</p>
+	  <p>You can view the source code of the minitoc React component <a href="https://codesandbox.io/s/live-retractable-toc-for-documentation-g4zv99?file=/src/components/minitoc.js">on this codesandbox</a>. 
+	  </p>
+	  <h3>Q: How about the problem of wide tables and images?</h3>
         <p><b>Scroll downwards</b>, you will see that the ToC seamlessly disappears when a wide table or image appears.</p>
-		</li>
-		<li>
-		<b>Q: Which headers does the ToC show, when visible?</b>
-        <p>The current logic is to show all h1 and h2, plus all headers currently visible in the scrolled window, plus any headers in between, up to h5. 
-		For example, if a single h4 is visible, you will see all h1 + all h2 + the h3 parent of the visible h4 plus the h4 itself. Feel free to express your views about this.</p>
-		</li>
-		<li>
+		<h3>Q: I see the ToC twice, WTF?</h3>
+        <p>If you see the ToC appear <b>twice</b> here, it is because here you are viewing it in development mode. Once the component is built, it only appears once. </p>
+		<p>If you are inside Axway, see  <a href="http://10.128.58.228/minitoc/"> this demo </a> for a production-type display, without the double-ToC effect.
+		  See 
+        <a href="https://stackoverflow.com/questions/72238175/why-useeffect-running-twice-and-how-to-handle-it-well-in-react">  this StackOverflow answer </a> 
+        for an explanation of the phenomenon.</p>
+
+
+
+		<h3>Q: Which headers does the ToC show, when visible?</h3>
+        <p>The current logic is to show all h1 and h2, plus all headers up to h5 currently visible in the scrolled window, plus any headers in between. 
+		For example, if a single h4 is visible, you will see [all h1] + [all h2] + the [h3] parent of the visible h4, plus the [h4] itself. </p>
+		<p>Feel free to express any views you might have about this.</p>
+
 		
-		<b>Q: Why did Zoomin mean about compatibility of the ToC with React?</b>
+		<h3>Q: Why did Zoomin mean about compatibility problems between the ToC and React?</h3>
 
 		<p>The best tool for dynamically building html when the user scrolls is called jQuery. </p>
-		<p>Back in the day (say until 2015) jQuery was widely used for building web interfaces. Since then, most of jQuery's uses have been replaced by React. But some cases, such as building html from an existing page on scroll, are better suited to jQuery.</p>
-		<p>When React was young, there were a lot of questions like "how do I get my existing jQuery to work in React", and the answer was usually that there was a better "React" way of doing it. The Minitoc is an exception.</p>
-		<p>Getting jQuery to work with React is a bit tricky - despite them both being based in Javascript - because they use opposite logics. jQuery starts from an existing html page and attaches interactivity, a bit like CSS starts from a page and adds styling. React on the contrary centers on the values of a set of code variables (known as the state) and translates that into an html interface. In React, user input, such as clicking on a button, selecting in a list, or typing in an form, triggers handler functions that modify the state variables that in turn translates into changes in the interface.</p>
-		</li>
-	</ul>
+		<p>Back in the day (say until 2015) jQuery was widely used for building web interfaces. Since then, most of jQuery's uses have been replaced by platforms like React. But some cases, such as dynamically building html from an existing page, are better suited to jQuery. When React was young, there were a lot of questions like "how do I get my existing jQuery to work in React", and the answer was usually that there was a better "React" way of doing it. The minitoc is an exception.</p>
+		<p>Getting jQuery to work with React is a bit tricky -despite them both being based in Javascript- because they use opposite logics. JQuery starts from an existing html page and attaches interactivity, a bit like CSS starts from a page and attaches styling (the class names and ids used by CSS also serve for jQuery). React on the contrary centers on the values of a set of code variables (known as the <i>state</i>) and translates that into an html interface. In React, any user input, such as clicking on a button, selecting in a list, or typing in a text area, triggers handler functions that modify the state variables, that in turn translates into changes in the interface.</p>
+		<p>The rest is Llorem Ipsum...</p>
+
 	  
-      <h2 id="bbbb">In anim </h2>
-
-
-
-
-	  <h2>Ille vero, si insipiens-quo certe;</h2>
+      <h2 id="bbbb">Llorem Ipsum </h2>
 
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facete M. Utilitatis causa amicitia est quaesita. Videsne, ut haec concinant? Aliter enim explicari, quod quaeritur, non potest. Quare ad ea primum, si videtur; </p>
 
-<h3>Ab his oratores, ab his imperatores.</h3>
+<h3>Ab his oratores, ab his imperatores</h3>
 
 <p>Peccata paria. Respondeat totidem verbis. Aliter enim nosmet ipsos nosse non possumus. Ne discipulum abducam, times. Vestri haec verecundius, illi fortasse constantius. Quod vestri non item. </p>
 
 <p>Quid sequatur, quid repugnet, vident. Suo enim quisque studio maxime ducitur. Contemnit enim disserendi elegantiam, confuse loquitur. Hos contra singulos dici est melius. </p>
 
 <p><mark>Sed ego in hoc resisto;</mark> Quae diligentissime contra Aristonem dicuntur a Chryippo. Quoniam, si dis placet, ab Epicuro loqui discimus. </p>
-
-<p><b>Quam ob rem tandem, inquit, non satisfacit?</b> Tu enim ista lenius, hic Stoicorum more nos vexat. Iam id ipsum absurdum, maximum malum neglegi. Refert tamen, quo modo. </p>
-
-<p><mark>Si longus, levis.</mark> Hic nihil fuit, quod quaereremus. Etiam beatissimum? <mark>Sequitur disserendi ratio cognitioque naturae;</mark> Beatum, inquit. Pugnant Stoici cum Peripateticis. </p>
-
-<blockquote cite='http://loripsum.net'>
-	Sin est etiam corpus, ista explanatio naturae nempe hoc effecerit, ut ea, quae ante explanationem tenebamus, relinquamus.
-</blockquote>
-
-
-<p>Nunc omni virtuti vitium contrario nomine opponitur. Facete M. Duo Reges: constructio interrete. <b>Recte, inquit, intellegis.</b> Falli igitur possumus. <b>An quod ita callida est, ut optime possit architectari voluptates?</b> </p>
-
-<ul>
-	<li>Et hercule-fatendum est enim, quod sentio -mirabilis est apud illos contextus rerum.</li>
-	<li>Paulum, cum regem Persem captum adduceret, eodem flumine invectio?</li>
-	<li>Transfer idem ad modestiam vel temperantiam, quae est moderatio cupiditatum rationi oboediens.</li>
-	<li>Atqui iste locus est, Piso, tibi etiam atque etiam confirmandus, inquam;</li>
-	<li>Non ego tecum iam ita iocabor, ut isdem his de rebus, cum L.</li>
-	<li>Praeclare Laelius, et recte sofñw, illudque vere: O Publi, o gurges, Galloni! es homo miser, inquit.</li>
-	<li>Satisne vobis videor pro meo iure in vestris auribus commentatus?</li>
-</ul>
-
-<h3>
-        Header with no id that is long long header long long long long long long long long
-        long long long long long long long long long long long long{' '}
-      </h3>
-      <p>
-        Sunt laborum id laboris aute magna aliqua amet amet cillum occaecat.
-        Magna irure enim reprehenderit minim aute aliquip nisi dolor sit. Culpa
-        esse aliquip cupidatat proident. Nulla aliquip occaecat cillum enim
-        tempor qui culpa. Dolore ut incididunt nisi labore non ullamco.
-      </p>
-
-<h3>Quare conare, quaeso.</h3>
-
-<p><b>Ergo, inquit, tibi Q.</b> Ne discipulum abducam, times. <mark>Non enim iam stirpis bonum quaeret, sed animalis.</mark> Quis istud possit, inquit, negare? Sumenda potius quam expetenda. Sed virtutem ipsam inchoavit, nihil amplius. </p>
 
 <h2>Big table</h2>
 	  <table>
@@ -843,12 +801,50 @@ export const Page1 = () => {
 		</td>
 		</tr>
 	  </table>
+	  
+	  <p><b>Quam ob rem tandem, inquit, non satisfacit?</b> Tu enim ista lenius, hic Stoicorum more nos vexat. Iam id ipsum absurdum, maximum malum neglegi. Refert tamen, quo modo. </p>
+
+<p><mark>Si longus, levis.</mark> Hic nihil fuit, quod quaereremus. Etiam beatissimum? <mark>Sequitur disserendi ratio cognitioque naturae;</mark> Beatum, inquit. Pugnant Stoici cum Peripateticis. </p>
+
+<blockquote cite='http://loripsum.net'>
+	Sin est etiam corpus, ista explanatio naturae nempe hoc effecerit, ut ea, quae ante explanationem tenebamus, relinquamus.
+</blockquote>
+
+
+<p>Nunc omni virtuti vitium contrario nomine opponitur. Facete M. Duo Reges: constructio interrete. <b>Recte, inquit, intellegis.</b> Falli igitur possumus. <b>An quod ita callida est, ut optime possit architectari voluptates?</b> </p>
+
+<ul>
+	<li>Et hercule-fatendum est enim, quod sentio -mirabilis est apud illos contextus rerum.</li>
+	<li>Paulum, cum regem Persem captum adduceret, eodem flumine invectio?</li>
+	<li>Transfer idem ad modestiam vel temperantiam, quae est moderatio cupiditatum rationi oboediens.</li>
+	<li>Atqui iste locus est, Piso, tibi etiam atque etiam confirmandus, inquam;</li>
+	<li>Non ego tecum iam ita iocabor, ut isdem his de rebus, cum L.</li>
+	<li>Praeclare Laelius, et recte sofñw, illudque vere: O Publi, o gurges, Galloni! es homo miser, inquit.</li>
+	<li>Satisne vobis videor pro meo iure in vestris auribus commentatus?</li>
+</ul>
+
+<h3>
+        Header with no id that is long long header long long long long long long long long
+        long long long long long long long long long long long long{' '}
+      </h3>
+      <p>
+        Sunt laborum id laboris aute magna aliqua amet amet cillum occaecat.
+        Magna irure enim reprehenderit minim aute aliquip nisi dolor sit. Culpa
+        esse aliquip cupidatat proident. Nulla aliquip occaecat cillum enim
+        tempor qui culpa. Dolore ut incididunt nisi labore non ullamco.
+      </p>
+
+<h3>Quare conare, quaeso</h3>
+
+<p><b>Ergo, inquit, tibi Q.</b> Ne discipulum abducam, times. <mark>Non enim iam stirpis bonum quaeret, sed animalis.</mark> Quis istud possit, inquit, negare? Sumenda potius quam expetenda. Sed virtutem ipsam inchoavit, nihil amplius. </p>
+
+
 
 	  <h2>Ut alios omittam</h2>
 
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mihi enim satis est, ipsis non satis. Idem iste, inquam, de voluptate quid sentit? Utilitatis causa amicitia est quaesita. Duo Reges: constructio interrete. </p>
 
-<h2>At hoc in eo M.</h2>
+<h2>At hoc in eo</h2>
 
 <p>Beatus autem esse in maximarum rerum timore nemo potest. Equidem e Cn. Suo genere perveniant ad extremum; Ratio quidem vestra sic cogit. </p>
 
@@ -908,7 +904,7 @@ export const Page1 = () => {
         esse aliquip cupidatat proident. Nulla aliquip occaecat cillum enim
         tempor qui culpa. Dolore ut incididunt nisi labore non ullamco.
       </p>
-	  <h3 id='dddww'>excepteur duis</h3>
+	  <h3 id='dddww'>Excepteur duis</h3>
       <p>
         Magna pariatur laborum culpa eiusmod minim proident consequat irure
         excepteur tempor tempor officia laborum esse. Reprehenderit amet irure
@@ -918,7 +914,7 @@ export const Page1 = () => {
         dolore velit. Fugiat velit quis dolor aute consequat laborum elit ad
         quis excepteur nulla sunt et. Id aliquip ex laborum duis et magna velit.
       </p>
-      <h3 id='eee'>laborum culpa </h3>
+      <h3 id='eee'>Laborum culpa </h3>
       <p>
         In anim irure elit sit officia cillum quis culpa sunt aliqua do. Ex
         fugiat mollit voluptate dolore consequat Lorem aliquip consequat
@@ -945,7 +941,7 @@ export const Page1 = () => {
         dolore velit. Fugiat velit quis dolor aute consequat laborum elit ad
         quis excepteur nulla sunt et. Id aliquip ex laborum duis et magna velit.
       </p>
-      <h3 id='fff'>irure elit </h3>
+      <h3 id='fff'>Irure elit </h3>
       <p>
         In anim irure elit sit officia cillum quis culpa sunt aliqua do. Ex
         fugiat mollit voluptate dolore consequat Lorem aliquip consequat
@@ -979,13 +975,13 @@ export const Page1 = () => {
         fugiat mollit voluptate dolore consequat Lorem aliquip consequat
         voluptate irure consectetur commodo Lorem veniam. Ipsum do proident sit
         anim qui magna culpa cupidatat qui enim anim duis.
-      </p>
+      </p><img src={bigPicture} alt="big picture" className='bigPicture' />
       <p>
         Sunt cupidatat labore ipsum sint eu minim sunt mollit pariatur magna
         exercitation. Ullamco proident enim aliqua voluptate adipisicing. Irure
         quis exercitation in nulla labore aute velit.
       </p>
-	  <h4>gggggggg ggggggg gggggggg</h4>
+	  <h4>Nulla aliquip</h4>
 	  <p>
         Sunt laborum id laboris aute magna aliqua amet amet cillum occaecat.
         Magna irure enim reprehenderit minim aute aliquip nisi dolor sit. Culpa
@@ -1022,7 +1018,7 @@ export const Page1 = () => {
         esse aliquip cupidatat proident. Nulla aliquip occaecat cillum enim
         tempor qui culpa. Dolore ut incididunt nisi labore non ullamco.
       </p>
-	  <h5>qqqqqqqq qqqqqqq qqqqqqq</h5>
+	  <h5>Fugiat velit quis dolor</h5>
 	  <p>
         Sunt laborum id laboris aute magna aliqua amet amet cillum occaecat.
         Magna irure enim reprehenderit minim aute aliquip nisi dolor sit. Culpa
@@ -1074,7 +1070,7 @@ export const Page1 = () => {
       <h2>Cum salvum esse flentes</h2>
 
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Prioris generis est docilitas, memoria; Hoc tu nunc in illo probas. Duo Reges: constructio interrete. Et quod est munus, quod opus sapientiae? </p>
-<img src={bigPicture} alt="big picture" className='bigPicture' />
+
 <p>Sed virtutem ipsam inchoavit, nihil amplius. Sit enim idem caecus, debilis. Illud non continuo, ut aeque incontentae. Sin aliud quid voles, postea. Est, ut dicis, inquam. Efficiens dici potest. </p>
 
 <ul>
@@ -1101,7 +1097,7 @@ export const Page1 = () => {
 
 <p>Primum divisit ineleganter; Primum divisit ineleganter; </p>
 
-<h6>Ait enim se, si uratur, Quam hoc suave! dicturum.</h6>
+<h6>Ait enim se, si uratur, Quam hoc suave! dicturum</h6>
 
 <p><mark>Tibi hoc incredibile, quod beatissimum.</mark> Mihi enim satis est, ipsis non satis. Collatio igitur ista te nihil iuvat. Graece donan, Latine voluptatem vocant. </p>
 
@@ -1113,7 +1109,7 @@ export const Page1 = () => {
 </ul>
 
 
-<h2>Isto modo ne improbos quidem, si essent boni viri.</h2>
+<h2>Isto modo ne improbos quidem, si essent boni viri</h2>
 
 <p>Sic consequentibus vestris sublatis prima tolluntur. Respondeat totidem verbis. Cyrenaici quidem non recusant; Gloriosa ostentatio in constituendo summo bono. Quis istud possit, inquit, negare? Mihi enim satis est, ipsis non satis. Proclivi currit oratio. Ea possunt paria non esse. </p>
 
@@ -1121,7 +1117,7 @@ export const Page1 = () => {
 
 <p>At hoc in eo M. Qui est in parvis malis. At, si voluptas esset bonum, desideraret. Certe, nisi voluptatem tanti aestimaretis. Est, ut dicis, inquam. </p>
 
-<h5>Ut optime, secundum naturam affectum esse possit.</h5>
+<h5>Ut optime, secundum naturam affectum esse possit</h5>
 
 <p>Non potes, nisi retexueris illa. <b>Cur id non ita fit?</b> Sed nimis multa. Equidem, sed audistine modo de Carneade? Quam si explicavisset, non tam haesitaret. </p>
 

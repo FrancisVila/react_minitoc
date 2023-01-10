@@ -4,6 +4,7 @@ import './minitoc.css'
 import $ from 'jquery'
 
 export const MiniToc = ({
+	contentSelector = "#content", // the selector of the container tag containing the html headers of the page
   levelsToShow = 5, // in the toc show headers h1, h2, h3, h4, h5
   widthInPageForToc = 250, // if there's any table or image 250+10=260px from the right edge, hide the ToC. Width of ToC will be 250-20=230)
   tagsToHideToc = ['table', 'tr', 'td', 'th', 'tbody', 'thead', 'img'] // hide the toc if one of these elements appears
@@ -28,7 +29,8 @@ export const MiniToc = ({
       // retrieve react parameters from invisible html tags (see JSX components in component's "render" return)
       const levelsToShow = Number($('#levelsToShow').text()) // in the toc show headers h1, h2, h3, h4
       const widthInPageForToc = Number($('#widthInPageForToc').text()) // if there's any table or image 250px from the right edge, hide the ToC)
-      const tagsToHideToc = eval($('#tagsToHideToc').text()) // hide the toc if one of these elements appears
+      const tagsToHideToc = JSON.parse (($('#tagsToHideToc').text()) )// hide the toc if one of these elements appears
+	  const contentSelector = $('#contentSelector').text()
       // hides ToC elements H3 and above for page elements not in view of the reader
       $(window).on('scroll', () => {
         const d = new Date()
@@ -115,7 +117,7 @@ export const MiniToc = ({
         // headerPath is an array of jQuery elements from the ToC giving the path to the currently processed header from the page
         let headerPath = [$tocItem_root]
         let selectors = headersSelector() // by default, "h1,h2,h3,h4"
-        $('#content')
+        $(contentSelector)
           .find(selectors)
           .each(function () {
             var $pageItem = $(this)
@@ -277,6 +279,7 @@ export const MiniToc = ({
       className={foldedOrNotCSS()}
       style={{ width: widthInPageForToc - 20 }}
     >
+		<p id='contentSelector' className='passValueFromReactToJquery'>{contentSelector}</p>
       <p id='levelsToShow' className='passValueFromReactToJquery'>
         {levelsToShow}
       </p>
@@ -284,8 +287,10 @@ export const MiniToc = ({
         {widthInPageForToc}
       </p>
       <p id='tagsToHideToc' className='passValueFromReactToJquery'>
-        [{tagsToHideToc.map(tag => `"${tag}",`)}]
+        {JSON.stringify(tagsToHideToc)}
       </p>
+	  
+	  
       <p onClick={handleOpenClose}>In this page: {openCloseIcon()}</p>
 
       <div id='minitoc_root'></div>

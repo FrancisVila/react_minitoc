@@ -1,7 +1,7 @@
 import logo from './logo.svg'
 import './App.css'
-import Page1 from './components/page1.js'
-import Page2 from './components/page2.js'
+import Page1 from './pages/page1.js'
+import Page2 from './pages/page2.js'
 import MiniToc from './components/minitoc.js'
 
 function App () {

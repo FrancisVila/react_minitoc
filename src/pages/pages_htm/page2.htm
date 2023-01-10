@@ -1,0 +1,1043 @@
+<div class="confluence-content"><div class="toc-macro"></div><h1 class="main-title confluence-content" id="title-text">Core Services installation</h1>
+  <p></p>
+  <div class="hidden toc-macro"></div>
+  <p></p>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>In case of upgrade, please refer to the readme file.</p>
+   </div>
+  </div>
+  <h2 id="CoreServicesinstallation-Conceptsandcontent">Concepts and content</h2>
+  <p>This product part provides the modules to run and use the Widget User interface. This interface enables designers to build monitoring dahsboards assembling and parameterizing widgets from the provided library.</p>
+  <p>To ease installation and communication the necessary modules are provided within a docker package.</p>
+  <p><br></p>
+  <p>This package contains the following modules :</p>
+  <ul>
+   <li>Keycloak: a module to manage the authorizations and user rights</li>
+   <li>Axway Document Manager: Module that manages the communication with elasticsearch</li>
+   <li>Elasticsearch: repository where all the Automator events and the dashboards definitions will be stored</li>
+   <li>Axway Itopsvision-ui: Module that manages the dashboards (creation, modification, usage...). It also contains the definition for the global widgets.</li>
+   <li>Axway Automator-ui: Module that contains all the widgets that can be used in Automator context within the dashboards</li>
+   <li>Axway Automator aggregation: Module that processes Automator events to prepare and store the data for their usage within the widgets.</li>
+  </ul>
+  <p><br></p>
+  <p><br></p>
+  <h2 id="CoreServicesinstallation-Prerequisites">Prerequisites</h2>
+  <h3 id="CoreServicesinstallation-Systemprerequisites">System prerequisites</h3>
+  <p>See appendix <a data-bundleid="Automator_41_Documentation_allOS_en_HTML5" data-navpath="appendix_1_supported_platforms_for_v4_1.html" href="/bundle/Automator_41_Documentation_allOS_en_HTML5/page/appendix_1_supported_platforms_for_v4_1.html" id="553954781">Supported platforms</a> to validate you install on a supported operating system.</p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup> 
+     <col> 
+     <col> 
+     <col> 
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh">Item</th>
+      <th class="confluenceTh">Configuration</th>
+      <th class="confluenceTh">Comments</th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd">CPU</td>
+      <td class="confluenceTd">2 cores dedicated</td>
+      <td class="confluenceTd">CPU will vary depending on product usage.</td>
+     </tr><tr>
+      <td class="confluenceTd">Memory</td>
+      <td class="confluenceTd">16 Go dedicated</td>
+      <td class="confluenceTd">Memory will vary depending on the usage of the product (number of users, number of charts, size of charts)</td>
+     </tr><tr>
+      <td class="confluenceTd">Disk Space</td>
+      <td class="confluenceTd">10 Go</td>
+      <td class="confluenceTd">Disk space will vary depending on the mount of job executed, actions performed, history kept. See appendix for more information.</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1">Ports</td>
+      <td class="confluenceTd" colspan="1"><p>7 ports</p></td>
+      <td class="confluenceTd" colspan="1">Defaults are:&nbsp; 8070/http (Keycloak), 8082/http (Doc Manager), 8083/http (Automator aggregation service),&nbsp; 8084/http (Automator service), 8085/http (common services), 9200/http &amp; 9300/http (elasticsearch).</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1"><br></td>
+      <td class="confluenceTd" colspan="1">1 optional port</td>
+      <td class="confluenceTd" colspan="1">5601/http(Kibana)</td>
+     </tr></tbody></table>
+  </div>
+  <h3 id="CoreServicesinstallation-Otherprerequisites">Other prerequisites</h3>
+  <p>Docker and docker-compose installed (it is recommended to use the last version of these products. See supported platforms appendix to know what is the last version validated by Axway. For docker-compose do not use V2 but only V1).</p>
+  <p>Refer to the&nbsp;<a data-bundleid="Automator_41_Documentation_allOS_en_HTML5" data-navpath="/csh" href="/csh?context=217867918">Security Guide (before publishing CSUP4)</a>&nbsp;for the docker installation checks.</p>
+  <p><br></p>
+  <p class="auto-cursor-target"><span style="color: rgb(23,43,77);">At least Axway Automator Core Technology 4.1.3 for Core Services 4.1 UP4:</span></p>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p><span style="color: rgb(51,51,51);">Modeling server and Production servers must be in 4.1.3 patch 1 minimum.<span>&nbsp;</span></span><span style="color: rgb(51,51,51);">Minimal version for Rest Server is 4.1.3 Patch 3.</span></p>
+   </div>
+  </div>
+  <h3 id="CoreServicesinstallation-Elasticsearchrepository">Elasticsearch repository</h3>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>In production it is mandatory to ensure the elasticsearch repository data gets the appropriate space and level of backup or redundancy.</p>
+    <p>Using the default single elasticsearch node within the docker is intended for test purpose only.</p>
+    <p>You can use an external elastic cluster, make the docker node part of an elastic cluster or at minimum use mount to performant redundant disk systems.</p>
+   </div>
+  </div>
+  <h3 id="CoreServicesinstallation-Systemrequirements">System requirements</h3>
+  <p>If you keep the elastic data within the docker, you will need a minimum of Max file descriptors 65536 and Max virtual memory areas 262144.</p>
+  <p>The container does not start or start and then stop running if these are set to low value.</p>
+  <p>To prevent, edit on linux<code>/etc/sysctl.conf</code> with following settings:</p>
+  <p><br></p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript">fs<span class="token punctuation">.</span>file<span class="token operator">-</span>max <span class="token operator">=</span> <span class="token number">800000</span>
+
+vm<span class="token punctuation">.</span>max_map_count<span class="token operator">=</span><span class="token number">300000</span></code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p>When you are ready, reboot the machine or use sysctl -p for the setting to be applied.</p>
+  <p><br></p>
+  <h3 id="CoreServicesinstallation-HTTPSconsiderations">HTTPS considerations</h3>
+  <p>You can secure communication between the different modules ( document manager, itopsvision-ui, itopsvision-automator, itopsvision-automator-aggreation, keycloak) but also between the users and the modules through TLS.</p>
+  <p><br></p>
+  <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+   <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>You must use your own elasticsearch instance (not the one provided in the package) if you want to enable TLS for elastic repository.&nbsp;</p>
+   </div>
+  </div>
+  <p>Remember communication is based on a docker private network between both services.</p>
+  <p><br></p>
+  <h4 id="CoreServicesinstallation-HTTPScertificates">HTTPS certificates</h4>
+  <p>If you want to use the Https installation mode, you need certificates.</p>
+  <p>You can use a different certificate for each module or use the same for several ones.</p>
+  <p>However only one trustsore can be configured.</p>
+  <p>Each module needs:</p>
+  <ul>
+   <li>A P12 or JKS format keystore containing the certificate it will use and the associated private key. If this certificate is not autosigned, the keystore must also include the trust chain certificates.</li>
+   <li>A truststore containng the trust certificates. The module will only accept connection with the modules for which it trusts the certificates</li>
+  </ul>
+  <p><br></p>
+  <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+   <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p class="auto-cursor-target">You need a JKS certificate for Keycloak.</p>
+   </div>
+  </div>
+  <p><br></p>
+  <p><br></p>
+  <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+   <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>The truststore must be generated with keytool to be able to use a PKCS12. If you use another generation tool, generate a JKS.</p>
+   </div>
+  </div>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <p class="title">Generating your certificates</p>
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>At store level, set aliases.</p>
+    <p>At certificate level, server certificates must have:</p>
+    <ul>
+     <li>a DNS SAN with the host name or an IP SAN with its IP address</li>
+     <li><code>key usage</code>: <code>digital signature</code></li>
+     <li><code>extended key usage</code>: <code>server authentication</code></li>
+    </ul>
+   </div>
+  </div>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    You also need to store the associated root certificates.
+   </div>
+  </div>
+  <p><br></p>
+  <h4 id="CoreServicesinstallation-GuidelinesforTLSconfigurationinelastic">Guidelines for TLS configuration in elastic&nbsp;</h4>
+  <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+   <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>This does not apply to the elastic provided in Automator docker which can only be used in HTTP.</p>
+   </div>
+  </div>
+  <p>Path to stores must be considered <span>towards </span><code>elasticsearch.yml.</code></p>
+  <h5 id="CoreServicesinstallation-Elasticsearch_ymlcontentexample">Elasticsearch.yml content example</h5>
+  <p>In this example, certificates lie in certs directory for an existing elasticsearch installation with several nodes in the cluster.</p>
+  <p>Hereunder, we focus on the security parameters i.e. other configuration parameters are not mentionned:</p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript">#<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span> Generic security parameters  <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span>
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>enabled<span class="token operator">:</span> <span class="token boolean">true</span>
+xpack<span class="token punctuation">.</span>license<span class="token punctuation">.</span>self_generated<span class="token punctuation">.</span>type<span class="token operator">:</span> basic
+ 
+ 
+#<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span> Internodes security parameters <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+ 
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>enabled<span class="token operator">:</span> <span class="token boolean">true</span>
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>verification_mode<span class="token operator">:</span> certificate
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>keystore<span class="token punctuation">.</span>path<span class="token operator">:</span> certs<span class="token operator">/</span>elk<span class="token operator">-</span>node3<span class="token punctuation">.</span>jks
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>truststore<span class="token punctuation">.</span>path<span class="token operator">:</span> certs<span class="token operator">/</span><span class="token constant">AC11</span><span class="token operator">-</span>lvl2<span class="token punctuation">.</span>jks
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>keystore<span class="token punctuation">.</span>password<span class="token operator">:</span> <span class="token number">12345678</span>
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>truststore<span class="token punctuation">.</span>password<span class="token operator">:</span> <span class="token number">1234345678</span>
+ 
+ 
+#<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span> Security parameters <span class="token keyword">for</span> client <span class="token function">applications</span> <span class="token punctuation">(</span>such <span class="token keyword">as</span> Document Manager<span class="token punctuation">)</span>  <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span>
+ 
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>http<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>enabled<span class="token operator">:</span> <span class="token boolean">true</span>
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>http<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>keystore<span class="token punctuation">.</span>path<span class="token operator">:</span> certs<span class="token operator">/</span>elk<span class="token operator">-</span>node3<span class="token punctuation">.</span>jks
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>http<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>truststore<span class="token punctuation">.</span>path<span class="token operator">:</span> certs<span class="token operator">/</span><span class="token constant">AC11</span><span class="token operator">-</span>lvl2<span class="token punctuation">.</span>jks
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>http<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>client_authentication<span class="token operator">:</span> optional
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>http<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>keystore<span class="token punctuation">.</span>password<span class="token operator">:</span> <span class="token number">12345678</span>
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>http<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>truststore<span class="token punctuation">.</span>password<span class="token operator">:</span> <span class="token number">12345678</span>
+xpack<span class="token punctuation">.</span>security<span class="token punctuation">.</span>http<span class="token punctuation">.</span>ssl<span class="token punctuation">.</span>verification_mode<span class="token operator">:</span> none
+
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p><br></p>
+  <p><br></p>
+  <h4 id="CoreServicesinstallation-TrackingWebUI">Tracking Web UI</h4>
+  <p>Widget user interface provides links to the tracking Web UI to enable to view a job in its chart instance context, to make actions or view the logs.</p>
+  <p>You need a PKCS12 certificate to access Tracking Web UI. See&nbsp;<a data-bundleid="Automator_41_Documentation_allOS_en_HTML5" data-navpath="tracking_web_ui_installation.html" href="/bundle/Automator_41_Documentation_allOS_en_HTML5/page/tracking_web_ui_installation.html" id="280725700">Tracking Web UI installation</a>.</p>
+  <p><br></p>
+  <h4 id="CoreServicesinstallation-ProductionserversandModelingservers">&nbsp;Production servers and Modeling servers</h4>
+  <p>You can also secure information upload from Production servers and Modelling servers into elastic repository.</p>
+  <p>The module part on Production servers and Modelling servers is called Agentbeat.&nbsp; It is delivered with these Automator packages. <span style="color: rgb(23,43,77);">It generates JSON documents for events published by Automator and sends them to the Document Manager service.</span></p>
+  <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+   <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>You will need to install the Document Manager certificate on each Production server and Modelling server. See&nbsp;<a data-bundleid="Automator_41_Documentation_allOS_en_HTML5" data-navpath="production_server_installation.html" href="/bundle/Automator_41_Documentation_allOS_en_HTML5/page/production_server_installation.html" id="280725408">Production Server installation</a> and&nbsp;<a data-bundleid="Automator_41_Documentation_allOS_en_HTML5" data-navpath="modelling_server_installation.html" href="/bundle/Automator_41_Documentation_allOS_en_HTML5/page/modelling_server_installation.html" id="280725285">Modelling server installation</a></p>
+   </div>
+  </div>
+  <h4 class="auto-cursor-target" id="CoreServicesinstallation-AutomatorRestserver">Automator Rest server</h4>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>&nbsp;Automator Rest server must have a non changing IP address</p>
+   </div>
+  </div>
+  <p><br></p>
+  <p>If your Automator Rest server is secured, you need to install its certificate in the same directory as the ones for the Core Services.</p>
+  <ul>
+   <li>Check certificate CN content&nbsp;</li>
+  </ul>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable" style="text-align: left;"><thead class="thead"></thead><tbody class="tbody"><tr style="text-align: left;">
+      <td class="confluenceTd" style="text-align: left;"><p style="text-align: left;"><code class="java plain" style="text-align: left;">openssl x509 -text -in RESTServer.crt|grep Subject</code></p></td>
+     </tr></tbody></table>
+  </div>
+  <ul>
+   <li style="list-style-type: none;">
+    <ul>
+     <li>CN should be a short name for instance : CN=SERVER2207</li>
+    </ul></li>
+   <li>Get its associated IP address (here SERVER2207, for instance 10.128.10.10)</li>
+   <li>Add the certificate to the truststore associated to the&nbsp; core services. Ex if the&nbsp; truststore is named truststore.p12, password <span>&nbsp;</span><span>truststore</span>, add it via</li>
+  </ul>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable" style="text-align: left;"><thead class="thead"></thead><tbody class="tbody"><tr style="text-align: left;">
+      <td class="confluenceTd" style="text-align: left;"><p style="text-align: left;"><code class="java plain" style="text-align: left;">keytool -</code><code class="java keyword" style="text-align: left;">import</code><span>&nbsp;</span><code class="java plain" style="text-align: left;">-file RESTServer.crt -alias restserver -keystore CERTS/truststore.p12 -storetype PKCS12 -storepass truststore</code></p></td>
+     </tr></tbody></table>
+  </div>
+  <ul>
+   <li style="list-style-type: none;">
+    <ul>
+     <li><span>Checking the import :</span></li>
+    </ul></li>
+  </ul>
+  <p><br></p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable" style="text-align: left;"><thead class="thead"></thead><tbody class="tbody"><tr style="text-align: left;">
+      <td class="confluenceTd" style="text-align: left;"><p style="text-align: left;"><code class="java plain" style="text-align: left;">keytool -list -keystore CERTS/truststore.p12&nbsp;</code></p></td>
+     </tr></tbody></table>
+  </div>
+  <div class="confluence-information-macro confluence-information-macro-note conf-macro output-block" data-hasbody="true" data-macro-name="note">
+   <span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>Core Services must also be configured in HTTPS</p>
+   </div>
+  </div>
+  <p><br></p>
+  <h4 class="auto-cursor-target" id="CoreServicesinstallation-Endusersworkstations">End users workstations</h4>
+  <p><br></p>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>Workstation administrators must add these certificates or the complete trust chain to the trusted ones in the appropriate location for the used browsers.</p>
+   </div>
+  </div>
+  <p><br></p>
+  <h2 id="CoreServicesinstallation-Installing">Installing</h2>
+  <h3 id="CoreServicesinstallation-Prepare"><span style="color: rgb(153,51,0);">Prepare</span></h3>
+  <h4 id="CoreServicesinstallation-Packagecontent">Package content</h4>
+  <p><span style="color: rgb(23,43,77);">From downloaded Automator package (<code>Automator_CORE_SERVICES_4.1_SPx_Install_AllOS_BNxxxxxxx.tar.gz&nbsp;</code>where xxxxxxx is the build number<em>)&nbsp;</em>, unzip and untar the package in your target directory.</span></p>
+  <p><span style="color: rgb(23,43,77);">Command example</span></p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript">gzip <span class="token operator">-</span>dc <span class="token operator">&lt;</span>Automator_CORE_SERVICES_4<span class="token punctuation">.</span>1_SP3_Install_AllOS_BNxxxxxxx<span class="token punctuation">.</span>tar<span class="token punctuation">.</span>gz<span class="token operator">&gt;</span> <span class="token operator">|</span> tar xvf <span class="token operator">-</span></code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p><br></p>
+  <p><span style="color: rgb(23,43,77);">You should find the following:</span></p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>File or directory</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><code>delivery.env</code> file</td>
+      <td class="confluenceTd" colspan="1" style="text-align: left;">Sample for the variables that must be configured for the container</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><code>cmds_to_load_images.sh</code> file</td>
+      <td class="confluenceTd" colspan="1" style="text-align: left;">Shell script to load the docker images when the target server has no access to internet</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><code>cmds_to_save_images.sh</code> file</td>
+      <td class="confluenceTd" colspan="1" style="text-align: left;">Shell script to save the imageswhen the target server has no access to internet</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><code>docker-compose.yml&nbsp;</code>file</td>
+      <td class="confluenceTd" colspan="1" style="text-align: left;">
+       <div class="content-wrapper">
+        <p>Container definition file.&nbsp;</p>
+        <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+         <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+         <div class="confluence-information-macro-body">
+          <p>This is the file used for the installation. The package contains 2 other files&nbsp;<code>docker-compose-HTTPS.yml&nbsp;</code>and&nbsp;<code>docker-compose-NO-HTTPS.yml</code><em>.</em></p>
+          <p>Rename the appropriate one into docker-compose.yml. By default the provided <code>docker-compose.yml</code> file corresponds to the<code>&nbsp;docker-compose-NO-HTTPS.yml</code><em>.</em></p>
+         </div>
+        </div>
+       </div></td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1"><code>copy-config.sh</code></td>
+      <td class="confluenceTd" colspan="1">Shell script to copy the folder tree in case you need to change the default data location</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><code>ReadMe.txt </code>or <code>Lisez-moi.txt</code></td>
+      <td class="confluenceTd" colspan="1" style="text-align: left;">Docker commands summary and reference to the appropriate documentation</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1">elasticsearch directory</td>
+      <td class="confluenceTd" colspan="1">Directory hosting the default configuration</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1">document manager directory</td>
+      <td class="confluenceTd" colspan="1">Directory hosting the default configuration and the logs</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1">itopsvision-automator directory</td>
+      <td class="confluenceTd" colspan="1">Directory hosting the default configuration and the logs</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1">itopsvision-automator-aggregation directory</td>
+      <td class="confluenceTd" colspan="1">Directory hosting the default configuration and the logs</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1">itopsvision-ui directory</td>
+      <td class="confluenceTd" colspan="1">Directory hosting the default configuration and the logs</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1"><span style="color: rgb(23,43,77);"><code>migr_&lt;versions&gt;.sh</code> file</span></td>
+      <td class="confluenceTd" colspan="1">file to use for migration only</td>
+     </tr></tbody></table>
+  </div>
+  <h4 id="CoreServicesinstallation-HTTPSinstallation">HTTPS installation</h4>
+  <p>Rename&nbsp;<code>docker-compose-HTTPS.yml </code>into&nbsp;<code>docker-compose.yml.</code></p>
+  <p><span style="color: rgb(23,43,77);"><span>Create a&nbsp;</span><code>CERTS</code> directory under the installation directory (default :<code>automator-services</code>).&nbsp;</span></p>
+  <p><span style="color: rgb(23,43,77);">Copy the certificates <strong>(including root certificates</strong>) into this directory.</span></p>
+  <div class="confluence-information-macro confluence-information-macro-tip conf-macro output-block" data-hasbody="true" data-macro-name="tip">
+   <span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>Give all rights on this directory and its content.</p>
+    <p><code>chmod -R 777 CERTS</code></p>
+   </div>
+  </div>
+  <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+   <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>In case you changed the default installation directory name, you can change the path in the <code>.env</code> file.</p>
+   </div>
+  </div>
+  <h5 id="CoreServicesinstallation-HTTPSCommunicationwithAutomatorRESTserver">HTTPS Communication with Automator REST server</h5>
+  <p><code><span>In </span>docker-compose.yml </code>file, remove the comments (#) on line extra_hosts and on the followinf one in section itopsvision-automator.</p>
+  <p>Replace the logical name by the CN and IP address content for the targeted server. In our example :</p>
+  <p><br></p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable" style="text-align: left;"><thead class="thead"></thead><tbody class="tbody"><tr style="text-align: left;">
+      <td class="confluenceTd" style="text-align: left;"><p style="text-align: left;"><code class="java spaces" style="text-align: left;">&nbsp;&nbsp;</code><code class="java plain" style="text-align: left;">restart: unless-stopped</code><br><code class="java spaces" style="text-align: left;">&nbsp;&nbsp;</code><code class="java plain" style="text-align: left;">extra_hosts:</code><br><code class="java spaces" style="text-align: left;">&nbsp;&nbsp;&nbsp;<span>&nbsp;</span></code><code class="java plain" style="text-align: left;">-<span>&nbsp;</span></code><code class="java string" style="text-align: left;">"SERVER2207:10.128.10.10"</code><br><code class="java spaces" style="text-align: left;">&nbsp;&nbsp;</code><code class="java plain" style="text-align: left;">environment:</code></p></td>
+     </tr></tbody></table>
+  </div>
+  <p><br></p>
+  <h4 id="CoreServicesinstallation-Withoutaninternetconnectiononthehosthostingthedocker">Without an internet connection on the host hosting the docker</h4>
+  <p>You can</p>
+  <ul>
+   <li>download the images from another linux system having docker installed and internet access and copy them to the target host</li>
+   <li>configure the Docker daemon to use a proxy server to access images</li>
+  </ul>
+  <h6 id="CoreServicesinstallation-Downloadingfromanotherserver">Downloading from another server</h6>
+  <p><span style="color: rgb(23,43,77);">Without an internet connection, download the docker package on another linux system which has internet access and docker installed.</span><em><span style="color: rgb(23,43,77);"><br></span></em></p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript">docker<span class="token operator">-</span>compose pull</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p><br></p>
+  <p><span style="color: rgb(23,43,77);">The package contains the<span>&nbsp;</span><code>cmds_to_save_images.sh<span>&nbsp;</span></code>script. Launch it to create a file per image in the directory where the script was launched.</span></p>
+  <p><span style="color: rgb(23,43,77);">Copy the images to the target Automator core services docker host in the directory where you unzipped the package (same level as .sh files).</span></p>
+  <p><span style="color: rgb(23,43,77);">Then use </span><code>cmd_to_load_images.sh&nbsp;</code>to load the images in the daemon.</p>
+  <p><br></p>
+  <p><br></p>
+  <h4 id="CoreServicesinstallation-Adaptingtoyourenvironment">Adapting to your environment</h4>
+  <ol>
+   <li>(optional) Rename the directory just created with a simpler name like 'automator'.&nbsp;</li>
+   <li>Copy the<span>&nbsp;</span><code>delivery.env</code><span>&nbsp;</span>file into the<span>&nbsp;</span><code>.env<span>&nbsp;</span></code>file.</li>
+   <li>Adapt the content to you environment (see below for explanations). This mainly means modifying the server names or IP address and the ports. Items not needed in this configuration are not listed here.</li>
+  </ol>
+  <p style="margin-left: 60.0px;">For the server declaration, you can use the IP address or the DNS name of the server.</p>
+  <p style="margin-left: 60.0px;">The server names must not contain "_".</p>
+  <p style="margin-left: 60.0px;">Even if server naming conventions state that host names must be in upper case, please define them in lower case inside the<span>&nbsp;</span><code>.env</code><span>&nbsp;</span>file.</p>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>If you use an IP address you will be able to connect to the product only using this IP address. If you use a dns name, only the dns name will be possible.</p>
+   </div>
+  </div>
+  <p style="margin-left: 60.0px;"><br></p>
+  <p><br></p>
+  <h5 id="CoreServicesinstallation-Ports">Ports</h5>
+  <p>In the<code> .env</code> file:</p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>Variable</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Sample of data</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>KEYCLOAK_PORT</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>8070</em></td>
+      <td class="confluenceTd" style="text-align: left;"><p>Exposed port for the dockerized Keycloak</p></td>
+     </tr><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>DOCUMENT_MANAGER_PORT</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>8082</em></td>
+      <td class="confluenceTd" style="text-align: left;"><p>Exposed port for the dockerized Document Manager</p></td>
+     </tr><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>AUTOMATOR_ITOPSVISION_PORT</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>8084</em></td>
+      <td class="confluenceTd" style="text-align: left;">Exposed port for the dockerized Automator UI</td>
+     </tr><tr>
+      <td class="confluenceTd"><code>AUTOMATOR_AGGREGATION_SERVICES_PORT</code></td>
+      <td class="confluenceTd"><em>8083</em></td>
+      <td class="confluenceTd">Exposed port for the dockerized Automator Aggregation</td>
+     </tr><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>ITOPSVISION_UI_PORT</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>8085</em></td>
+      <td class="confluenceTd" style="text-align: left;">Exposed port for the dockerized ItOpsVision UI</td>
+     </tr><tr>
+      <td class="confluenceTd" style="text-align: left;"><span style="color: rgb(0,0,0);"><code>ELASTIC_PORT</code></span></td>
+      <td class="confluenceTd" style="text-align: left;"><em>9200</em></td>
+      <td class="confluenceTd" style="text-align: left;">Exposed port for the dockerized ElasticSearch</td>
+     </tr><tr>
+      <td class="confluenceTd" style="text-align: left;"><span style="color: rgb(0,0,0);"><code>ELASTIC_ADMIN_PORT</code></span></td>
+      <td class="confluenceTd" style="text-align: left;"><em>9300</em></td>
+      <td class="confluenceTd" style="text-align: left;">Exposed port for the dockerized ElasticSearch Administration</td>
+     </tr></tbody></table>
+  </div>
+  <h5 id="CoreServicesinstallation-ElasticSearchconfiguration">ElasticSearch configuration</h5>
+  <p><br></p>
+  <p>In production, it is advised to connect to an external Elastic instance, rather than using the mononode instance from the docker. In which case, comment out the<span>&nbsp;</span><code>elasticsearch-itopsvision</code><span>&nbsp;</span>section in the<span>&nbsp;</span><code>docker-compose.yml</code>, and modify the ports and access to ElasticSearch listed below accordingly.</p>
+  <p>A good network speed between all the hosts used by the Automator platform is mandatory.</p>
+  <p><br></p>
+  <p>In the<code> .env</code> file:</p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>Variable</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Sample of data</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>ELASTIC_SEARCH_HOST</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>elasticsearch-itopsvision</em></td>
+      <td class="confluenceTd" style="text-align: left;">Dockerized ElasticSearch service default name or IP address / DNS Name if elastic running outside docker</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><code>ELASTIC_SEARCH_CLUSTER</code></td>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><em>elasticsearch</em></td>
+      <td class="confluenceTd" colspan="1" style="text-align: left;">(Dockerized) ElasticSearch cluster name</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><code>ELASTIC_USER</code></td>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><em>myUser</em></td>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><p>(Dockerized) ElasticSearch user name</p><p>Leave empty if you do not want to enable security between Document Manager and&nbsp; ElasticSearch</p><p>Fill it to enable basic authentication between Document Manager and ElasticSearch</p></td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><code>ELASTIC_PASSWORD</code></td>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><em>ABC0123!zy</em></td>
+      <td class="confluenceTd" colspan="1" style="text-align: left;"><p>(Dockerized) ElasticSearch password</p><p>Leave empty if you do not want to enable security between Document Manager and ElasticSearch</p><p>Fill it to enable basic authentication between Document Manager and ElasticSearch</p></td>
+     </tr></tbody></table>
+  </div>
+  <p><br></p>
+  <h5 id="CoreServicesinstallation-CoreServiceshost_fromUP4onwards_">Core Services host (from UP4 onwards)</h5>
+  <p>In the<code> .env</code> file:</p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>Variable</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Sample of data</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>CORESERVICES_HOST_IP</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>itops</em></td>
+      <td class="confluenceTd" style="text-align: left;"><p>Core services hostname or IP address</p><p>Used by default in the stated configuration below. Reference to this variable must be changed for instance if you do not installed the Automator Rest server on the same machine.</p></td>
+     </tr></tbody></table>
+  </div>
+  <h5 id="CoreServicesinstallation-DocumentManagerconfiguration">Document Manager configuration</h5>
+  <p>In the<code> .env</code> file:</p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>Variable</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Sample of data</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>DOCUMENT_MANAGER_HOST</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>itops</em></td>
+      <td class="confluenceTd" style="text-align: left;"><p>Dockerized Document Manager hostname or IP address</p><p><span style="color: rgb(23,43,77);">Information to use in Production and Modeling servers configuration</span></p></td>
+     </tr></tbody></table>
+  </div>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>Be careful with the document manager port and address. You will need to use same address and port during Automator installation. Automator production and modeling server will send data to this address using this port.</p>
+   </div>
+  </div>
+  <p><br></p>
+  <h5 id="CoreServicesinstallation-Keycloakconfiguration">Keycloak configuration</h5>
+  <p>In the<code> .env</code> file:</p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>Variable</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Sample of data</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>KEYCLOAK_HOST</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>itops</em></td>
+      <td class="confluenceTd" style="text-align: left;">Dockerized Keycloak hostname or IP address</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1"><code><span style="color: rgb(36,36,36);">KEYCLOAK_ADMIN_PWD</span></code></td>
+      <td class="confluenceTd" colspan="1"><em>admin</em></td>
+      <td class="confluenceTd" colspan="1">Dokerized Keycloak admin password</td>
+     </tr></tbody></table>
+  </div>
+  <p><br></p>
+  <h5 id="CoreServicesinstallation-Internaluserconfiguration_forlinuxonly_">Internal user configuration (for linux only)</h5>
+  <p>Get first your installation user Identifiers:</p>
+  <p><br></p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript"> id <span class="token operator">&lt;</span>username<span class="token operator">&gt;</span> </code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p><br></p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>Variable</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Sample of data</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" style="text-align: left;"><code><span>USR</span></code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>1000</em></td>
+      <td class="confluenceTd" style="text-align: left;">user identifier</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1"><code>GRP</code></td>
+      <td class="confluenceTd" colspan="1"><em>1000</em></td>
+      <td class="confluenceTd" colspan="1">group identifier</td>
+     </tr></tbody></table>
+  </div>
+  <h5 id="CoreServicesinstallation-Mountpointsconfiguration">Mount points configuration</h5>
+  <p>If you need to locate data elsewhere on your system keeping compose here you need to adapt the <code>CORESVC_ROOT_DIR</code> in the <code>.env</code> file.</p>
+  <p>By default it points to automator-services (currently this directory ./), except for elastic data and keycloak data that are managed by docker volumes.</p>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>This change must be made before the first start of the services. Do not apply this procedure if the services have already been started once.</p>
+   </div>
+  </div>
+  <p><br></p>
+  <p>if you want to change that and modify:<br>- elastic data storage place<br>change the <code>ELK_DATA_DIR</code> and make it point to where you need</p>
+  <p><br>- keycloak configuration and data<br>change the<code> KEYCLOAK_BASE_DIR</code> to reflect where you want them to be stored</p>
+  <p><br>- root for configuration files for services not changing elastic or keycloak:<br>change the<code> CORESVC_ROOT_DIR</code></p>
+  <p><br>- everything making all data to be stored at the same place including elastic and keycloak<br>modify the <code>CORESVC_ROOT_DIR</code> to point where you want data<br>modify <code>ELK_DATA_DIR</code> to<code> ${CORESVC_ROOT_DIR}/elastic-data</code><br>modify <code>KEYCLOAK_BASE_DIR</code> to <code>${CORESVC_ROOT_DIR}/keycloak-basedir</code></p>
+  <h6 id="CoreServicesinstallation-OnUnix">On Unix</h6>
+  <p>if you have changed the <code>CORESVC_ROOT_DIR</code>,</p>
+  <ul>
+   <li>check if the directory exists and is empty with the appropriate rights</li>
+   <li>use the <code>copy-config.sh</code> script to move the tree of configuration files to the right place.</li>
+   <li>Check the rights on the created directories and adapt them as needed.</li>
+  </ul>
+  <p>Example:</p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript">chmod <span class="token operator">-</span><span class="token constant">R</span> <span class="token number">777</span> <span class="token operator">/</span>opt<span class="token operator">/</span>axway<span class="token operator">/</span>automator<span class="token operator">-</span>docker<span class="token operator">-</span>services<span class="token operator">-</span>data</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p>As a result, you should have under that <code>CORESVC_ROOT_DIR</code>:</p>
+  <ul>
+   <li>&nbsp;<code>document-manager/config/delivery.application.properties</code></li>
+   <li>if you use the elastic node provided in the docker, <code>elasticsearch/config/elasticsearch.yml</code></li>
+   <li>&nbsp;<code>itopsvision-ui/config/delivery.application.properties</code></li>
+   <li><code>&nbsp;itopsvision-automator/config/delivery.application.properties</code></li>
+   <li><code>&nbsp;itopsvision-automator-aggregation/config/delivery.application.properties</code></li>
+  </ul>
+  <h6 id="CoreServicesinstallation-OnWindows">On Windows</h6>
+  <p>You can specify the target path by using '\' in the <code>.env</code> file. For instance, you can use:</p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript"><span class="token constant">CORESVC_ROOT_DIR</span><span class="token operator">=</span>c<span class="token operator">:</span>\users\jdiamond\docker
+<span class="token constant">ELK_DATA_DIR</span><span class="token operator">=</span>$<span class="token punctuation">{</span><span class="token constant">CORESVC_ROOT_DIR</span><span class="token punctuation">}</span>\elastic<span class="token operator">-</span>data 
+etc<span class="token operator">...</span></code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p>In addition you have to copy the directories for each service <code>&lt;service&gt;/config/delivery.application.properties </code>and <code>elasticsearch/config/</code> in the destination folder</p>
+  <h5 id="CoreServicesinstallation-Httpsinstallationonly_Certificates">Https installation only: Certificates</h5>
+  <p>Uncomment the following the lines with values as shown below and adapt with your own certificate names, passwords and aliases:</p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript"># <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+#
+# <span class="token constant">CERTIFICATES</span>
+#
+# <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+  
+# Keycloak keystore containing authentication server certificate <span class="token operator">+</span> <span class="token keyword">private</span> key <span class="token operator">+</span> certificate chain
+ <span class="token constant">KEYCLOAK_KEYSTORE</span><span class="token operator">=</span>keycloak<span class="token punctuation">.</span>jks
+ <span class="token constant">KEYCLOAK_KEYSTORE_PWD</span><span class="token operator">=</span>keycloak
+ <span class="token constant">KEYCLOAK_KEY_PWD</span><span class="token operator">=</span>keycloak
+ <span class="token constant">KEYCLOAK_CERT_ALIAS</span><span class="token operator">=</span>keycloak
+  
+# <span class="token constant">ITOPS</span> services
+#
+# Document Manager keystore containing authentication server certificate <span class="token operator">+</span> <span class="token keyword">private</span> key <span class="token operator">+</span> certificate chain
+# Comment<span class="token operator">:</span> Agentbeat must have <span class="token constant">DM</span> certificates filled <span class="token keyword">with</span> certificate <span class="token keyword">in</span> <span class="token constant">PEM</span> format<span class="token punctuation">.</span> Please check the documentation
+ <span class="token constant">DM_KEYSTORE</span><span class="token operator">=</span>dm<span class="token punctuation">.</span>p12
+ <span class="token constant">DM_KEYSTORE_PWD</span><span class="token operator">=</span>dmpwd
+ <span class="token constant">DM_KEY_PWD</span><span class="token operator">=</span>dmkeypwd
+ <span class="token constant">DM_CERT_ALIAS</span><span class="token operator">=</span>dm
+#
+# itopsvision <span class="token constant">UI</span> keystore containing authentication server certificate <span class="token operator">+</span> <span class="token keyword">private</span> key <span class="token operator">+</span> certificate chain
+ <span class="token constant">ITOPSUI_KEYSTORE</span><span class="token operator">=</span>itopsui<span class="token punctuation">.</span>p12
+ <span class="token constant">ITOPSUI_KEYSTORE_PWD</span><span class="token operator">=</span>itopsuipwd
+ <span class="token constant">ITOPSUI_KEY_PWD</span><span class="token operator">=</span>itopsuikeypwd
+ <span class="token constant">ITOPSUI_CERT_ALIAS</span><span class="token operator">=</span>itopsui
+#
+# itopsvision automator keystore containing authentication server certificate <span class="token operator">+</span> <span class="token keyword">private</span> key <span class="token operator">+</span> certificate chain
+ <span class="token constant">ITOPS_AUTOM_KEYSTORE</span><span class="token operator">=</span>widgets<span class="token punctuation">.</span>p12
+ <span class="token constant">ITOPS_AUTOM_KEYSTORE_PWD</span><span class="token operator">=</span>widgetspwd
+ <span class="token constant">ITOPS_AUTOM_KEY_PWD</span><span class="token operator">=</span>widgetskeypwd
+ <span class="token constant">ITOPS_AUTOM_CERT_ALIAS</span><span class="token operator">=</span>widgets
+#
+# trustore <span class="token keyword">for</span> clients<span class="token punctuation">,</span> must include certificates <span class="token keyword">of</span> services <span class="token keyword">for</span> checking on client side<span class="token punctuation">.</span> No <span class="token keyword">private</span> keys <span class="token keyword">in</span> trust store
+# <span class="token keyword">if</span> certificates are auto signed it must contain the certificates otherwise the <span class="token constant">CA</span> <span class="token keyword">for</span> certificate chain validation
+ <span class="token constant">AUTOM_TRUSTSTORE</span><span class="token operator">=</span>itops<span class="token punctuation">.</span>p12
+ <span class="token constant">AUTOM_TRUSTSTORE_PWD</span><span class="token operator">=</span>itops</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p><br></p>
+  <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+   <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p><code>AUTOM_TRUSTSTORE</code> contains the certificates to CA chain that will be used to validate server certificates.</p>
+   </div>
+  </div>
+  <p><br></p>
+  <h5 id="CoreServicesinstallation-Automatorwidgetconfiguration">Automator widget configuration</h5>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>Variable</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Sample of data</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>AUTOMATOR_ITOPSVISION_HOST</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>itops</em></td>
+      <td class="confluenceTd" style="text-align: left;">Dockerized Auomator Widget service hostname or IP address</td>
+     </tr><tr>
+      <td class="confluenceTd"><code>automator_index</code></td>
+      <td class="confluenceTd"><em>axw_automator</em></td>
+      <td class="confluenceTd">ElasticSearch index</td>
+     </tr><tr>
+      <td class="confluenceTd"><code>historic_max_document (from UP4 onwards)</code></td>
+      <td class="confluenceTd"><em>2000</em></td>
+      <td class="confluenceTd">Sets the maximum number of items to return as a search result.<br>It is important to set this number to a reasonable value in order to avoid huge data exchange between layers.</td>
+     </tr><tr>
+      <td class="confluenceTd"><code>service_exposure_execution_max</code></td>
+      <td class="confluenceTd"><em>5</em></td>
+      <td class="confluenceTd">Maximum number of last executions to display for the chosen date in service exposure form widget</td>
+     </tr></tbody></table>
+  </div>
+  <p><br></p>
+  <h5 id="CoreServicesinstallation-RestAPIconfiguration">Rest API configuration</h5>
+  <p>In order to be able to use the "Service / exposure / form" widget, some additional data have to be specified in the <code>.env</code> file.</p>
+  <p>Before Core Services 4.1 UP4:</p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>Variable</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Sample of data</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>RESTApiHost</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>itops</em></td>
+      <td class="confluenceTd" style="text-align: left;">server hosting the REST Server</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1"><code>RESTApiPort </code></td>
+      <td class="confluenceTd" colspan="1"><em>5000</em></td>
+      <td class="confluenceTd" colspan="1">port of the REST Server</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1"><code>automator_service_user</code></td>
+      <td class="confluenceTd" colspan="1">abc</td>
+      <td class="confluenceTd" colspan="1">automator_service_user can be filled with an existing connection user in Automator (but should remain empty in most cases). If specified this user name will be used for the service creation instead of the connected user</td>
+     </tr></tbody></table>
+  </div>
+  <p class="auto-cursor-target">From Core Services 4.1 UP4 onwards:</p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>Variable</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Sample of data</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>RESTApiHostURL</code></td>
+      <td class="confluenceTd" style="text-align: left;"><a rel="nofollow" style="text-decoration: none;text-align: left;">http://${CORESERVICES_HOST_IP}:5000/</a></td>
+      <td class="confluenceTd" style="text-align: left;">
+       <div class="content-wrapper">
+        <p>URL including protocol and port to use to communicate with the REST Server</p>
+        <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+         <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+         <div class="confluence-information-macro-body">
+          <p>Put the REST server host name or IP address if it is not installed on the same machine as the Core Services</p>
+         </div>
+        </div>
+        <p class="title" style="text-align: left;"><br></p>
+        <div class="confluence-information-macro confluence-information-macro-tip conf-macro output-block" data-hasbody="true" data-macro-name="tip">
+         <p class="title">Rest server HTTPS</p>
+         <span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"> </span>
+         <div class="confluence-information-macro-body">
+          <p>Set targeted server with the short name found in the certificate CN</p>
+         </div>
+        </div>
+       </div></td>
+     </tr><tr>
+      <td class="confluenceTd"><code>automator_service_user</code></td>
+      <td class="confluenceTd">abc</td>
+      <td class="confluenceTd">automator_service_user can be filled with an existing connection user in Automator (but should remain empty in most cases). If specified this user name will be used for the service creation instead of the connected user</td>
+     </tr></tbody></table>
+  </div>
+  <div class="confluence-information-macro confluence-information-macro-tip conf-macro output-block" data-hasbody="true" data-macro-name="tip">
+   <span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>Before Core Services 4.1 UP4, from Axway Automator Core Tech 4.1 UP2, REST server is configured in HTTPS by default. It must be changed to HTTP for current Core Services communication. See REST server installation chapter.</p>
+    <p>From Core Services 4.1 UP4 onwards, you should put the REST server certificate in the Core Services certificate directory.</p>
+   </div>
+  </div>
+  <p><br></p>
+  <h5 id="CoreServicesinstallation-Automatoraggregationserviceconfiguration">Automator aggregation service configuration</h5>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>Variable</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Sample of data</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>AUTOMATOR_AGGREGATION_SERVICES_HOST</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>itops</em></td>
+      <td class="confluenceTd" style="text-align: left;">Dockerized Automator aggregation service hostname or IP address</td>
+     </tr><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>current_session_number_days (from UP4 onwards)</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>9</em></td>
+      <td class="confluenceTd" style="text-align: left;">Last job status retention period (days) for all widgets except the statistic and historical search ones</td>
+     </tr><tr>
+      <td class="confluenceTd" style="text-align: left;"><code>historic_retention_general (from UP4 onwards)</code></td>
+      <td class="confluenceTd" style="text-align: left;"><em>10</em></td>
+      <td class="confluenceTd" style="text-align: left;">&nbsp;Session depth retention period (day) for historical search job table widget</td>
+     </tr></tbody></table>
+  </div>
+  <p><br></p>
+  <h5 id="CoreServicesinstallation-Adaptingretention_beforeCoreServices4_1UP4_">Adapting retention (before Core Services 4.1 UP4)</h5>
+  <p>If you need to adapt retention settings, please refer to&nbsp;<a data-bundleid="Automator_41_Documentation_allOS_en_HTML5" data-navpath="/csh" href="/csh?context=268904793">Operation Guide (old befaore publishing CSUP4)</a>, Customizing Core Services (before UP4) section.</p>
+  <p><br></p>
+  <h5 id="CoreServicesinstallation-ITOpsVisionUIserviceconfiguration">ITOpsVision UI service configuration</h5>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh" style="text-align: left;"><p>Variable</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Sample of data</p></th>
+      <th class="confluenceTh" style="text-align: left;"><p>Description</p></th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd" style="text-align: left;">ITOPSVISION_UI_HOST</td>
+      <td class="confluenceTd" style="text-align: left;"><em>itops</em></td>
+      <td class="confluenceTd" style="text-align: left;">Dockerized ItOpsVision service hostname or IP address</td>
+     </tr></tbody></table>
+  </div>
+  <h4 id="CoreServicesinstallation-HTTPSDocumentManagersettingstocommunicatewithelasticinHTTPS">HTTPS Document Manager settings to communicate with elastic in HTTPS</h4>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>HTTPS should be set at your elastic level first by your elastic administrators (see above section for recommandations)</p>
+   </div>
+  </div>
+  <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+   <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>This does not apply to the elastic provided in Automator docker which can only be used in HTTP.</p>
+   </div>
+  </div>
+  <p><br></p>
+  <p>In <code>document-manager/config&nbsp;</code>directory, make a copy of <code>delivery.application.properties </code>file<code>.</code></p>
+  <p>In <code>delivery.</code><code>application.properties,&nbsp;</code>edit the following entries&nbsp;file:</p>
+  <div class="table-wrap">
+   <table class="wrapped confluenceTable"><colgroup>
+     <col>
+     <col>
+     <col>
+    </colgroup><thead class="thead"><tr>
+      <th class="confluenceTh">Variable</th>
+      <th class="confluenceTh">Example</th>
+      <th class="confluenceTh">Description</th>
+     </tr></thead><tbody class="tbody"><tr>
+      <td class="confluenceTd"><pre class="prettyprint language-javascript">xpack.tls.enabled</pre></td>
+      <td class="confluenceTd"><em>True</em></td>
+      <td class="confluenceTd">Enables TLS between Document Manager and elastic</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1"><pre class="prettyprint language-javascript">xpack.client.truststore.path</pre></td>
+      <td class="confluenceTd" colspan="1"><em>RootPath.p12</em></td>
+      <td class="confluenceTd" colspan="1">Truststore path</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1"><pre class="prettyprint language-javascript">xpack.client.truststore.password</pre></td>
+      <td class="confluenceTd" colspan="1"><em>abc</em></td>
+      <td class="confluenceTd" colspan="1">Truststore password</td>
+     </tr><tr>
+      <td class="confluenceTd" colspan="1"><pre class="prettyprint language-javascript">xpack.client.keystore.path</pre></td>
+      <td class="confluenceTd" colspan="1"><em>Mykey.p12</em></td>
+      <td class="confluenceTd" colspan="1">Keystore path</td>
+     </tr><tr>
+      <td class="confluenceTd"><pre class="prettyprint language-javascript">xpack.client.keystore.password</pre></td>
+      <td class="confluenceTd"><em>abckey</em></td>
+      <td class="confluenceTd">Keystore password</td>
+     </tr></tbody></table>
+  </div>
+  <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+   <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>Ensure not to have any<code> application.properties</code> file in the <code>config </code>directory, before applying the rest of the procedure.</p>
+   </div>
+  </div>
+  <p><br></p>
+  <h3 id="CoreServicesinstallation-Deploying"><span style="font-size: 20.0px;font-weight: normal;letter-spacing: -0.008em;">Deploying</span></h3>
+  <p><br></p>
+  <div class="confluence-information-macro confluence-information-macro-tip conf-macro output-block" data-hasbody="true" data-macro-name="tip">
+   <span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>It is easier to add your current user to docker group to avoid using sudo on Unix. <strong>docker</strong> group should exist. If your user is "myuser", add it to docker group by :</p>
+    <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+     <div class="codeContent panelContent pdl"> 
+      <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript">sudo usermod <span class="token operator">-</span>aG docker myuser</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+     </div>
+    </div>
+    <p class="auto-cursor-target">In case of difficulties please refer to docker site documentation.</p>
+   </div>
+  </div>
+  <h3 id="CoreServicesinstallation-Instanciatingthecontainers">Instanciating the containers</h3>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>All&nbsp;<code>docker-compose</code> commands must be launched from the <code>automator-services&nbsp;</code>directory&nbsp; (or the one you renamed).</p>
+    <p><code>docker-compose </code>commands might be transformed into <code>docker compose&nbsp;</code>depending on the way you installed docker and docker compose.</p>
+   </div>
+  </div>
+  <p><br></p>
+  <p>This command both instanciates the containers and starts them.</p>
+  <p><br></p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript">docker<span class="token operator">-</span>compose up <span class="token operator">-</span>d</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p><br></p>
+  <p>(then all services should be running)</p>
+  <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+   <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    It is only to be used at instanciation step. To start the containers once instanciated refer to 
+    <em>Starting the services</em> section below.
+   </div>
+  </div>
+  <h3 id="CoreServicesinstallation-Checkingiftheservicesarerunning">Checking if the services are running</h3>
+  <p>Once done,</p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript">docker<span class="token operator">-</span>compose ps</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p>will list all services that are started. But they are not necessarily ready to answer requests.</p>
+  <p><br></p>
+  <p><br></p>
+  <h3 id="CoreServicesinstallation-Startingtheservices">Starting the services</h3>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>All&nbsp;<code>docker-compose</code> commands must be launched from the <code>automator-services&nbsp;</code>directory (or the one you renamed).</p>
+   </div>
+  </div>
+  <h4 id="CoreServicesinstallation-Fisrttimeinstanciation">Fisrt time instanciation</h4>
+  <div class="confluence-information-macro confluence-information-macro-tip conf-macro output-block" data-hasbody="true" data-macro-name="tip">
+   <span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+     <div class="codeContent panelContent pdl"> 
+      <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript">docker<span class="token operator">-</span>compose up <span class="token operator">-</span>d</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+     </div>
+    </div>
+    <p>should only be used the first time to instanciate the containers.</p>
+   </div>
+  </div>
+  <h4 id="CoreServicesinstallation-Standardservicesstart">Standard services start</h4>
+  <p>The start of the services can be done with</p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript">docker<span class="token operator">-</span>compose start</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p><br></p>
+  <h3 id="CoreServicesinstallation-Stoppingtheservices">Stopping the services</h3>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>All&nbsp;<code>docker-compose</code> commands must be launched from the <code>automator-services&nbsp;</code>directory (or the one you renamed).</p>
+   </div>
+  </div>
+  <p>To stop all the services, use</p>
+  <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code" style="border-width: 1px;">
+   <div class="codeContent panelContent pdl"> 
+    <div class="code-toolbar"><pre class="syntaxhighlighter-pre prettyprint linenums language-javascript" tabindex="0"><code class="syntaxhighlighter-pre prettyprint language-javascript">docker<span class="token operator">-</span>compose stop</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div> 
+   </div>
+  </div>
+  <p><br></p>
+  <h2 id="CoreServicesinstallation-HTTPSClientconsideration">HTTPS Client consideration</h2>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>Workstation administrators must add the generated certificates or the complete trust chain to the trusted ones in the appropriate location for the used browsers.</p>
+   </div>
+  </div>
+  <h2 id="CoreServicesinstallation-AdjustingdefaultKeycloakconfiguration">Adjusting default Keycloak configuration</h2>
+  <h3 id="CoreServicesinstallation-ConnectingtoKeycloakadministrationinterface">Connecting to Keycloak administration interface</h3>
+  <p>Once keycloak is started (<span style="color: rgb(23,43,77);">"Keycloak 4.4.0.Final (WildFly Core 5.0.0.Final) started in 56529ms" in the log</span>) connect to:</p>
+  <h4 id="CoreServicesinstallation-Httpconnection">Http connection</h4>
+  <p><a class="external-link" href="http://host:8070/auth" rel="nofollow" target="_blank">http://&lt;host&gt;:&lt;port&gt;/auth</a> with admin/admin&nbsp; to the administration console.</p>
+  <p><span style="color: rgb(23,43,77);">where &lt;host&gt; corresponds to the host specified for Keycloak in the <code>.env</code> file, and port is the associated port (default 8070).</span></p>
+  <h4 id="CoreServicesinstallation-Httpsconnection">Https connection</h4>
+  <p><a class="external-link" href="http://host:8070/auth" rel="nofollow" target="_blank">https://&lt;host&gt;:&lt;port&gt;/auth</a> with admin/admin&nbsp; to the administration console.</p>
+  <p><span style="color: rgb(23,43,77);">where &lt;host&gt; corresponds to the host specified for Keycloak in the <code>.env</code> file, and port is the associated port (default 8070).</span></p>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>Make sure to change default's admin password for obvious security reasons.</p>
+   </div>
+  </div>
+  <p><br></p>
+  <p><br></p>
+  <h3 id="CoreServicesinstallation-Creatingusers">Creating users</h3>
+  <h4 id="CoreServicesinstallation-Usercreationandrolesassignment">User creation and roles assignment</h4>
+  <p>Create <span style="color: rgb(23,43,77);">users with the desired roles, for instance, ROLE_ITOPSVISION_ADMIN and/or ROLE_ITOPSVISION_USER.</span></p>
+  <p><span style="color: rgb(23,43,77);">ROLE_ITOPSVISION_ADMIN will enable core service administration including dashboard creation.</span></p>
+  <p><span style="color: rgb(23,43,77);">ROLE_ITOPSVISION_USER will enable the usage of dashboards.</span></p>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    A user opadmin/opadmin is delivered in keycloak. It is highly recommended to change its password as well as admin's password.
+   </div>
+  </div>
+  <h5 id="CoreServicesinstallation-ExamplestepswithinKeycloak">Example steps within Keycloak</h5>
+  <p><em><br></em></p>
+  <div class="confluence-information-macro confluence-information-macro-note conf-macro output-block" data-hasbody="true" data-macro-name="note">
+   <span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    This section is just for information, may vary depending on keycloak version and does not replace keycloak documentation.
+   </div>
+  </div>
+  <p><span style="color: rgb(23,43,77);">To create a new user go to the "Users" section in keycloak</span><span style="color: rgb(23,43,77);">.</span></p>
+  <p><span style="color: rgb(23,43,77);"><a class=" mfp-image" href="/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-42-22.png"><img alt="" class="confluence-embedded-image expandable" data-base-url="https://confluence.axway.com" data-image-src="/download/attachments/553954741/image2020-7-2_9-42-22.png?version=1&amp;modificationDate=1668762941956&amp;api=v2" data-linked-resource-container-id="553954741" data-linked-resource-container-version="15" data-linked-resource-content-type="image/png" data-linked-resource-default-alias="image2020-7-2_9-42-22.png" data-linked-resource-id="553954744" data-linked-resource-type="attachment" data-linked-resource-version="1" data-unresolved-comment-count="0" draggable="false" src="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-42-22.png?_LANG=enus" style="cursor: pointer;" data-fancy="gallery" data-gallery="gallery" data-remote="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-42-22.png?_LANG=enus" data-title="" role="button" tabindex="0" aria-label="Open image in gallery mode" width="250"><img class="zDocsExpandIcon" src="https://cdn.zoominsoftware.io/axway-prod-skin/public/assets/img/zoom_in.svg?bc616fd317d8c7e77009" id="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-42-22.png?_LANG=enus"></a></span></p>
+  <p><span style="color: rgb(23,43,77);">Click on the "add user" button.</span></p>
+  <p><span style="color: rgb(23,43,77);">In the following screen, enter the user name and keep other default values. Save.</span></p>
+  <p><span style="color: rgb(23,43,77);"><a class=" mfp-image" href="/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-43-44.png"><img alt="" class="confluence-embedded-image expandable" data-base-url="https://confluence.axway.com" data-image-src="/download/attachments/553954741/image2020-7-2_9-43-44.png?version=1&amp;modificationDate=1668762941959&amp;api=v2" data-linked-resource-container-id="553954741" data-linked-resource-container-version="15" data-linked-resource-content-type="image/png" data-linked-resource-default-alias="image2020-7-2_9-43-44.png" data-linked-resource-id="553954745" data-linked-resource-type="attachment" data-linked-resource-version="1" data-unresolved-comment-count="0" draggable="false" src="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-43-44.png?_LANG=enus" style="cursor: pointer;" data-fancy="gallery" data-gallery="gallery" data-remote="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-43-44.png?_LANG=enus" data-title="" role="button" tabindex="0" aria-label="Open image in gallery mode" height="250"><img class="zDocsExpandIcon" src="https://cdn.zoominsoftware.io/axway-prod-skin/public/assets/img/zoom_in.svg?bc616fd317d8c7e77009" id="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-43-44.png?_LANG=enus"></a></span></p>
+  <p><span style="color: rgb(23,43,77);">Once created, click on the "Credentials" tab.</span></p>
+  <p><span style="color: rgb(23,43,77);"><a class=" mfp-image" href="/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-46-25.png"><img alt="" class="confluence-embedded-image expandable" data-base-url="https://confluence.axway.com" data-image-src="/download/attachments/553954741/image2020-7-2_9-46-25.png?version=1&amp;modificationDate=1668762941961&amp;api=v2" data-linked-resource-container-id="553954741" data-linked-resource-container-version="15" data-linked-resource-content-type="image/png" data-linked-resource-default-alias="image2020-7-2_9-46-25.png" data-linked-resource-id="553954746" data-linked-resource-type="attachment" data-linked-resource-version="1" data-unresolved-comment-count="0" draggable="false" src="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-46-25.png?_LANG=enus" style="cursor: pointer;" data-fancy="gallery" data-gallery="gallery" data-remote="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-46-25.png?_LANG=enus" data-title="" role="button" tabindex="0" aria-label="Open image in gallery mode" width="600"><img class="zDocsExpandIcon" src="https://cdn.zoominsoftware.io/axway-prod-skin/public/assets/img/zoom_in.svg?bc616fd317d8c7e77009" id="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-46-25.png?_LANG=enus"></a></span></p>
+  <p><span style="color: rgb(23,43,77);"><a class=" mfp-image" href="/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-47-35.png"><img alt="" class="confluence-embedded-image expandable" data-base-url="https://confluence.axway.com" data-image-src="/download/attachments/553954741/image2020-7-2_9-47-35.png?version=1&amp;modificationDate=1668762941964&amp;api=v2" data-linked-resource-container-id="553954741" data-linked-resource-container-version="15" data-linked-resource-content-type="image/png" data-linked-resource-default-alias="image2020-7-2_9-47-35.png" data-linked-resource-id="553954747" data-linked-resource-type="attachment" data-linked-resource-version="1" data-unresolved-comment-count="0" draggable="false" src="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-47-35.png?_LANG=enus" style="cursor: pointer;" data-fancy="gallery" data-gallery="gallery" data-remote="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-47-35.png?_LANG=enus" data-title="" role="button" tabindex="0" aria-label="Open image in gallery mode" height="250"><img class="zDocsExpandIcon" src="https://cdn.zoominsoftware.io/axway-prod-skin/public/assets/img/zoom_in.svg?bc616fd317d8c7e77009" id="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-47-35.png?_LANG=enus"></a></span></p>
+  <p><span style="color: rgb(23,43,77);">The password can be set. If temporary is activated, the user will have to change its password at the first login.&nbsp;</span></p>
+  <p><span style="color: rgb(23,43,77);">Then click on the "Role Mapping" tab.</span></p>
+  <p><span style="color: rgb(23,43,77);"><a class=" mfp-image" href="/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-48-18.png"><img alt="" class="confluence-embedded-image expandable" data-base-url="https://confluence.axway.com" data-image-src="/download/attachments/553954741/image2020-7-2_9-48-18.png?version=1&amp;modificationDate=1668762941966&amp;api=v2" data-linked-resource-container-id="553954741" data-linked-resource-container-version="15" data-linked-resource-content-type="image/png" data-linked-resource-default-alias="image2020-7-2_9-48-18.png" data-linked-resource-id="553954748" data-linked-resource-type="attachment" data-linked-resource-version="1" data-unresolved-comment-count="0" draggable="false" src="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-48-18.png?_LANG=enus" style="cursor: pointer;" data-fancy="gallery" data-gallery="gallery" data-remote="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-48-18.png?_LANG=enus" data-title="" role="button" tabindex="0" aria-label="Open image in gallery mode" height="250"><img class="zDocsExpandIcon" src="https://cdn.zoominsoftware.io/axway-prod-skin/public/assets/img/zoom_in.svg?bc616fd317d8c7e77009" id="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-48-18.png?_LANG=enus"></a></span></p>
+  <p><span style="color: rgb(23,43,77);">Select roles to affect to the user and click "Add selected" to assign roles to the user.</span></p>
+  <p><a class=" mfp-image" href="/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-53-42.png"><img alt="" class="confluence-embedded-image expandable" data-base-url="https://confluence.axway.com" data-image-src="/download/attachments/553954741/image2020-7-2_9-53-42.png?version=1&amp;modificationDate=1668762941968&amp;api=v2" data-linked-resource-container-id="553954741" data-linked-resource-container-version="15" data-linked-resource-content-type="image/png" data-linked-resource-default-alias="image2020-7-2_9-53-42.png" data-linked-resource-id="553954749" data-linked-resource-type="attachment" data-linked-resource-version="1" data-unresolved-comment-count="0" draggable="false" src="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-53-42.png?_LANG=enus" style="cursor: pointer;" data-fancy="gallery" data-gallery="gallery" data-remote="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-53-42.png?_LANG=enus" data-title="" role="button" tabindex="0" aria-label="Open image in gallery mode" height="250"><img class="zDocsExpandIcon" src="https://cdn.zoominsoftware.io/axway-prod-skin/public/assets/img/zoom_in.svg?bc616fd317d8c7e77009" id="https://docs-be.axway.com/bundle/Automator_41_Documentation_allOS_en_HTML5/page/files/_553954741image2020-7-2_9-53-42.png?_LANG=enus"></a></p>
+  <p><br></p>
+  <h2 id="CoreServicesinstallation-ConnectingtoAutomatorWidgetUI">Connecting to Automator Widget UI</h2>
+  <h3 id="CoreServicesinstallation-Httpconnection_1">Http connection</h3>
+  <p><span style="color: rgb(23,43,77);">Connect to Automator dashboard UI using <a class="external-link" href="http://autdemo2.lab1.lab.ptx.axway.int:8085/itopsvision/ui/" rel="nofollow" target="_blank">http://&lt;host&gt;:&lt;port&gt;/itopsvision/ui/</a> </span></p>
+  <p><span style="color: rgb(23,43,77);">where &lt;host&gt; corresponds to the host specified for Automator services in the<code> .env</code> file, and port is the associated port (default 8085).</span></p>
+  <p><br></p>
+  <h3 id="CoreServicesinstallation-Httpsconnection_1">Https connection</h3>
+  <p><span style="color: rgb(23,43,77);">Connect to Automator dashboard UI using <a class="external-link" href="http://autdemo2.lab1.lab.ptx.axway.int:8085/itopsvision/ui/" rel="nofollow" target="_blank">https://&lt;host&gt;:&lt;port&gt;/itopsvision/ui/</a> </span></p>
+  <p><span style="color: rgb(23,43,77);">where &lt;host&gt; corresponds to the host specified for Automator services in the<code> .env</code> file, and port is the associated port (default 8085).</span></p>
+  <h3 id="CoreServicesinstallation-Registeringcomponents"><span style="color: rgb(128,0,0);">Registering components</span></h3>
+  <p><span style="color: rgb(23,43,77);">Automator components must be registered in order to be able to create dashboards.</span></p>
+  <p><span style="color: rgb(23,43,77);">Go to <strong>configuration</strong>/<strong>components</strong> and click on <strong>Add</strong>.</span></p>
+  <p><br></p>
+  <div class="confluence-information-macro confluence-information-macro-warning conf-macro output-block" data-hasbody="true" data-macro-name="warning">
+   <p class="title">HTTPS only</p>
+   <span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>If you use HTTPS mode, replace in the components registration URL, <em>http</em> by&nbsp;<em>https</em></p>
+   </div>
+  </div>
+  <p><br></p>
+  <h4 id="CoreServicesinstallation-RegisteringAutomatorWidgetcomponent"><span style="color: rgb(128,0,0);">Registering Automator Widget component</span></h4>
+  <p><span style="color: rgb(23,43,77);">Enter this url (after changing host name and port): <span style="color: rgb(16,24,31);"> <a class="external-link" href="http://linelk.lab1.lab.ptx.axway.int:8084/automator/api/v1/component" rel="nofollow" target="_blank">http://&lt;your host&gt;:&lt;your port 8084 is default&gt;/automator/api/v1/component</a> </span> </span></p>
+  <h4 id="CoreServicesinstallation-RegisteringAutomatorWebuicomponent"><span style="color: rgb(128,0,0);">Registering Automator Web ui component</span></h4>
+  <p><span style="color: rgb(23,43,77);">After deploying Automator web UI you will also have to register the Automator web ui.</span></p>
+  <p><span style="color: rgb(23,43,77);">Proceed like above with this url : <span style="color: rgb(16,24,31);"> <a class="external-link" href="http://linelk.lab1.lab.ptx.axway.int:8080/automator_390/api/component" rel="nofollow" target="_blank">http://&lt;web server host&gt;:&lt;port&gt;/automator-webui_4.1/api/component</a> </span> </span></p>
+  <div class="confluence-information-macro confluence-information-macro-information conf-macro output-block" data-hasbody="true" data-macro-name="info">
+   <span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"> </span>
+   <div class="confluence-information-macro-body">
+    <p>It is mandatory to be able to open job information in Automator Web UI from Automator Widget UI. This concerns the following widgets:&nbsp;</p>
+    <ul>
+     <li><span style="color: rgb(16,24,31);">Job / Punctuality / Table</span></li>
+     <li><span style="color: rgb(16,24,31);">Job / Status / Table</span></li>
+     <li><span style="color: rgb(16,24,31);">Job / Wait / Table</span></li>
+     <li><span style="color: rgb(16,24,31);">Job / Search / Historic Table</span></li>
+    </ul>
+   </div>
+  </div>
+  <h4 id="CoreServicesinstallation-Registeringtheglobalcomponents"><span style="color: rgb(128,0,0);"><span class="auto-cursor-target">Registering the global components</span></span></h4>
+  <p><span style="color: rgb(23,43,77);"> <span style="color: rgb(16,24,31);">The global components must be registered to be able to use the associated widgets:</span> </span></p>
+  <p>Use this url: <a class="external-link" href="http://10.128.10.96:8085/itopsvision/api/v1/components/library" rel="nofollow" target="_blank">http://</a> <a class="external-link" href="http://linelk.lab1.lab.ptx.axway.int:8084/automator/api/v1/component" rel="nofollow" target="_blank">&lt;your host&gt;:&lt;your port 8085 is default&gt;</a>/itopsvision/api/v1/components/library</p>
+  <p><br></p>
+ 
+
+</div>

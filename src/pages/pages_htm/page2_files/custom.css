@@ -1,0 +1,355 @@
+/* SecureTransport-specific styles */	
+	
+	/* breadcrumbs Paragraph: both media & print */
+
+	p.breadCrumb
+	{
+	font-weight: bold;
+	color: #696969 !important;
+	}
+
+
+	/* a DIV container box that sits on top of the page and lists links to H2 subtopics within a topic */
+	@media screen
+	{
+		
+		.inTopic {				
+		box-sizing: content-box;
+		display: inline-block;
+		width: fit-content;
+		padding: 0px 20px 10px 0px;
+		text-align: left;
+		background-color: #f5f5f5;
+		border: 1px solid lightgrey;
+		border-radius: 2px;
+		margin-left: 20px;		
+		}
+	}
+
+/* ST landing page: avoid text and icons on different columns */
+div.land-page-multi-cols p {
+	page-break-inside:avoid; 
+}
+
+
+	/* ST landing page links to docs: big screen */
+
+	@media screen and (min-width: 1023px)
+	{
+		div.land-page-multi-cols
+		{
+			column-count: 3;
+			column-gap: 30px;
+			column-rule: solid 1px lightgrey;
+		}		
+	}
+	/* ST landing page links to docs: mid screen */
+
+	@media screen and (min-width: 640px) and (max-width: 1023px)
+	{
+		div.land-page-multi-cols
+		{
+			column-count: 2;
+			column-gap: 30px;
+			column-rule: solid 1px lightgrey;
+		}	
+	}
+
+	/* landing page: screen only: small screen */
+
+	@media screen and (max-width: 640px)
+	{
+		div.land-page-multi-cols
+		{
+			column-count: 1;
+			column-gap: 30px;
+			column-rule: solid 1px lightgrey;
+		}	
+	}
+
+/* end of SecureTransport-specific styles */
+
+/* test styles for open banking */
+/* example of usage https://axway.zoominsoftware.io/bundle/AxwayOpenBanking/page/docs/reference/brazil/compliance/index.html */
+
+.pageinfo-primary {
+    border-style: solid;
+    border-color: #006580;
+}
+.pageinfo {
+    font-weight: 500;
+    background: #f8f9fa;
+    color: inherit;
+    border-radius: 0;
+    margin: 2rem;
+    padding: 1.5rem;
+    padding-bottom: .5rem;
+}
+/* end test styles for open banking */
+
+/* begin markdown overrides */
+
+.highlight {
+	padding-bottom: 10px;
+}
+
+.lead {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #333;
+	font-family: 'Roboto', sans-serif;
+	font-weight: normal;	
+}
+
+.panel-line {
+	visibility: hidden;
+}
+
+.reading-time {
+	display: none;
+}
+
+/*
+.text-muted.mt-5.pt-3.border-top {
+	display:none;
+}
+*/
+
+/* end markdown overrides */
+
+
+/* Begin general overrides */
+
+blockquote {
+	    font-size: 14px;
+}
+
+/* Remi recommended the code below to force links to anchors to open at the anchor location instead of several lines below the anchor */
+
+a[name] {
+  scroll-margin-top: 110px;
+}
+
+/* End general overrides */
+
+/* Begin Swagger UI JSON overrides */
+
+.svg-assets {
+	display:none;
+}
+/*
+pre.version {
+    color: #000 !important;
+}
+*/
+
+.swagger-ui .info .main a.link {
+	color:blue;
+}
+
+/*
+button.btn.try-out__btn {
+	visibility: hidden;	
+}
+*/
+/*
+.swagger-ui .btn.authorize {
+    display: none;
+}
+*/
+/*
+.swagger-ui .authorization__btn.unlocked {
+    display: none;
+}
+*/
+.article .swagger-ui  .info__contact {
+    display: block;
+}
+.article .swagger-ui .info__license {
+    display: block;
+}
+.swagger-ui .scheme-container {
+    display: block;
+}
+
+/* End Swagger UI JSON overrides */
+
+/* Begin overrides of common header elements */
+
+/* Hide the search field */
+/*
+.sc-fbIWvP.jREztg {
+	display:none;
+}
+*/
+#axway-portals-common-search {
+  display: none;
+}
+
+/* End overrides of common header elements */
+
+/* begin Flow Manager and Transfer CFT and ST what's new overrides */
+
+/** WHAT'S NEW PAGES **/
+.whatsnew {
+    display: none;
+}
+.whatsnew + .contentLayout2,
+div.flare-content  {
+  font-family: "Roboto", -apple-system, system-ui, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: #4A4F54;
+  margin-top: 0px;
+  max-width: 1280px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.whatsnew + .contentLayout2 .columnLayout {
+   margin-bottom:0;
+} 
+.whatsnew + .contentLayout2 .columnLayout.single:first-child p {
+  text-align: center; /* center title in zoomin */
+  pointer-events: none; /* prevents clicks on the title on both confluence and zoomin*/
+}
+.wiki-content .contentLayout2 .columnLayout .cell {
+  padding-left:24px;
+  padding-right:24px;
+}
+.whatsnew + .contentLayout2 h2, /* new release date */
+.whatsnew.flare ~ h2 {
+  color: #001E26;
+  font-size: 24px !important;  /* !important is for zoomin*/
+  font-weight: bold !important;  /* !important is for zoomin*/
+  text-transform: capitalize;
+  padding-left: 8px;
+  display: inline-block; /* to have build number on the same line */
+  margin-top: 72px !important; /* more separation between versions */
+  margin-bottom: 8px !important; /* separation before features */
+}
+.whatsnew.flare ~ h2 {
+  padding-left: 24px;
+}
+/* doc portal: remove extra padding between versions */
+.article-entry article .whatsnew + .contentLayout2 h2, .article-entry article .whatsnew.flare ~ h2 {
+    padding-top: 0 !important;
+}
+.whatsnew+ .contentLayout2 .single h2 + p, /* build number*/
+.whatsnew.flare ~ h2 + p {
+  color: #979896;
+  font-size: 14px;
+  line-height: 16px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  display: inline-block; /* to have build number on the same line */
+  margin-left: 24px; /* space between release and build */
+}  
+.whatsnew+.contentLayout2 .three-equal,
+.whatsnew.flare ~ h2 ~ table {
+  border-collapse: separate;
+  border-spacing: 24px 12px;
+  empty-cells: hide;
+  width: 100% !important;
+}
+.whatsnew + .contentLayout2 table {  
+  width:100% !important;  
+}  
+.whatsnew.flare ~ h2 ~ table {
+  border-spacing: 24px 24px; /* flare needs  24px */
+}
+.whatsnew.flare ~ h2 ~ table td{
+  width: 33% !important; /* without this cells are not equal */
+}
+.whatsnew + .contentLayout2 .three-equal .cell,
+.whatsnew.flare ~ h2 ~ table td {
+  padding: 24px 32px !important; /* !important is for zoomin*/
+  border: 2px solid #EFEFEF;
+  border-radius: 10px;
+  vertical-align: top; /* force td conent to top for flare generated doc */
+}
+.whatsnew + .contentLayout2 .three-equal h3,
+.whatsnew.flare ~ h2 ~ table td h3 {
+  color:#001E26;
+  font-size: 20px !important; /* !important is for zoomin*/
+  font-weight: bold !important;  /* !important is for zoomin*/
+  margin-bottom: 16px !important; /* for confluence*/
+  padding-top: 0  !important;  /* !important is for zoomin*/
+  margin-top: 0 !important;  /* !important is for zoomin*/
+}
+.whatsnew + .contentLayout2 .three-equal p,
+.whatsnew.flare ~ h2 ~ table td p,
+.whatsnew.flare ~ h2 ~ table td p.description {
+  color: #4A4F54;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.16px;
+  margin-left: 0 !important;  /* for p.description */
+}
+/*
+.whatsnew + .contentLayout2 .three-equal .cell a[href*="youtu"]:before,
+.whatsnew.flare ~ h2 ~ table td a[href*="youtu"]:before{
+  padding: 0px 2px 0px 3px;
+  content:"\2BC8";
+  background: red;
+  color: white;
+  border-radius: 50%;
+  border: 0px solid white;
+  margin-right: 4px !important; /* !important is for confluence*/
+}
+.whatsnew + .contentLayout2 a {
+  color: #0073a5; /* force color of links in confluence */
+}
+.whatsnew + .contentLayout2 .confluence-information-macro.confluence-information-macro-information {
+  background: white;
+  background: linear-gradient(to right, #EFEFEF, #EFEFEF 35px, white 35px);
+  border-color: #EFEFEF;
+}
+.whatsnew + .contentLayout2 .confluence-information-macro .confluence-information-macro-body {
+  padding-left: 8px;
+}
+.whatsnew + .contentLayout2 .confluence-information-macro .confluence-information-macro-icon.aui-iconfont-info {
+  color: #006580;
+}
+/* mini-status mini-badge */
+.whatsnew + .contentLayout2 .aui-lozenge {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 2px;
+  text-transform: uppercase;
+  padding: 1px 8px 1px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 12px;
+  /*default*/
+  color: #001e26;
+  background: #f4f5f4;
+  border-color: #efefef;
+}
+.whatsnew + .contentLayout2 .aui-lozenge-error {
+  color: white;
+  background: #800008;
+  border-color: #800008;
+}
+/* CSS for New Doc Portal for Remi's what's new - DEC 2022 */
+article div.confluence-content .whatsnew + .contentLayout2 h2 {
+  color: #001E26;
+  font-size: 24px !important;  /* !important is for zoomin*/
+  font-weight: bold !important;  /* !important is for zoomin*/
+  margin-top: 72px !important; /* more separation between versions */
+  margin-bottom: 8px !important; /* separation before features */
+}
+article  div.confluence-content .whatsnew+ .contentLayout2 .single h2 + p {
+  margin-left: 24px; /* space between date and version */
+}
+article div.confluence-content .whatsnew+ .contentLayout2 .three-equal .cell {
+  padding-top: 2px;
+  padding-bottom: 20px;
+  padding-right: 24px;
+}
+article div.confluence-content .columnLayout.three-equal .cell.normal {
+  margin-left: 0px;
+  flex: 0 0 32%;
+}
+article div.confluence-content .whatsnew + .contentLayout2 .columnLayout {
+    margin-bottom: 24px;
+}
+/* end Flow Manager and Transfer CFT and ST what's new overrides */
+
