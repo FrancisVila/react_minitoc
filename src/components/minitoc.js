@@ -30,6 +30,7 @@ export const MiniToc = ({
       $(window).on('scroll', () => {
         const d = new Date()
         console.log('AAAAAAAAAAAAAA', d.getTime())
+		console.log('scroll ====================================')
         // console.log("ZZZZZZZZZZZZZ")
         hideAllOrPartOfToc()
       })
@@ -67,19 +68,22 @@ export const MiniToc = ({
       const somethingClashWithToC = () => {
         // alert( (document.elementFromPoint(pageWidth-10,0)).toString())
         let ret = false
-        console.log('===========================')
+        console.log('entering somethingClashWithToC=')
         // scan the page displayed in the browser (apparent to the user) from top to bottom
+		var minitocLeftStart = $("#minitoc").offset().left;
         for (let y = 0; y < windowHeight(); y = y + 10) {
-          const domElemRight = document.elementFromPoint(
-            pageWidth - widthInPageForToc,
-            y
-          )
-
+          
+		  const domElemRight = document.elementFromPoint (minitocLeftStart-20,y)
           if (domElemRight) {
             // console.log("domElemRight=", domElemRight, 'y=',y,)
-
+			
             const rightTagName = domElemRight.tagName.toLowerCase()
-            if (tagsToHideToc.includes(rightTagName)) ret = true
+            if (tagsToHideToc.includes(rightTagName)) 
+				{
+				console.log(domElemRight, "ret equals true")
+				ret= true
+				break
+			}
             console.log('rightTagName', rightTagName)
           }
         }
@@ -185,12 +189,33 @@ export const MiniToc = ({
 
       // hide all or part of the toc
       const hideAllOrPartOfToc = () => {
-        console.log('scroll ====================================')
-        if (somethingClashWithToC()) {
+        let somethingClashWithToc = false
+        console.log('entering somethingClashWithToC=')
+        // scan the page displayed in the browser (apparent to the user) from top to bottom
+		var minitocLeftStart = $("#minitoc").offset().left;
+        for (let y = 0; y < windowHeight(); y = y + 10) {
+          
+		  const domElemRight = document.elementFromPoint (minitocLeftStart-20,y)
+          if (domElemRight) {
+            // console.log("domElemRight=", domElemRight, 'y=',y,)
+			
+            const rightTagName = domElemRight.tagName.toLowerCase()
+            if (tagsToHideToc.includes(rightTagName)) 
+				{
+				console.log(domElemRight, "ret equals true")
+				somethingClashWithToc= true
+				
+			}
+            console.log('rightTagName', rightTagName)
+          }
+        }
+        if (somethingClashWithToc) {
           // hide all the ToC
-          $('#minitoc').hide()
+		  console.log("In hideAllOrPartOfToc, hiding ToC")
+          $('#minitoc').addClass('hideToc')
         } else {
-          $('#minitoc').show()
+          $('#minitoc').removeClass('hideToc')
+		  console.log("In hideAllOrPartOfToc, showing ToC")
           hideTocElems()
         }
       }
