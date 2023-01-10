@@ -7,13 +7,12 @@ export const Page1 = () => {
   return (
     <div id='content'>
 
-<h1 id="aaaa">Scroll down to view effect on ToC</h1>
+<h1 id="aaaa">Mini ToC demo</h1>
       <p>Click on "In this page" to hide the ToC </p>
 	  <h2>FAQ</h2>
 	  <h3>Q: What is this demo trying to prove?</h3>
-	  <p>This demo shows a React component that builds a table of contents of a page. The component is compatible with any React-based site containing html headers and some space to the right. More specifically, Zoomin can drop it anywhere in the React code of the Axway doc portal (introduced in November 2022).</p>
-	  <p>You can view the source code of the minitoc React component <a href="https://codesandbox.io/s/live-retractable-toc-for-documentation-g4zv99?file=/src/components/minitoc.js">on this codesandbox</a>. 
-	  </p>
+	  <p>This demo shows a React component that builds a table of contents of a page. The component is compatible with any React-based site containing html headers and some space to the right. More specifically, Zoomin can drop it into the React code of the Axway doc portal (introduced in November 2022).</p>
+	  <p>You can view the source code of the minitoc React component <a href="https://codesandbox.io/s/live-retractable-toc-for-documentation-g4zv99?file=/src/components/minitoc.js">on this codesandbox</a>. It is pushed to a github repo here:  <a href="https://github.com/FrancisVila/react_minitoc">https://github.com/FrancisVila/react_minitoc</a>	  </p>
 	  <h3>Q: How about the problem of wide tables and images?</h3>
         <p><b>Scroll downwards</b>, you will see that the ToC seamlessly disappears when a wide table or image appears.</p>
 		<h3>Q: I see the ToC twice, WTF?</h3>
@@ -30,8 +29,9 @@ export const Page1 = () => {
 		For example, if a single h4 is visible, you will see [all h1] + [all h2] + the [h3] parent of the visible h4, plus the [h4] itself. </p>
 		<p>Feel free to express any views you might have about this.</p>
 
-		
-		<h3>Q: Why did Zoomin mean about compatibility problems between the ToC and React?</h3>
+		<h3>Q: Why are minitocs important?</h3>
+		<p>Mini ToCs are important because they mean longer pages are viable. Information is less spread out. Users need to do less navigation. Less navigation means less hassle.</p>
+		<h3>Q: What did Zoomin mean about compatibility problems between the ToC and React?</h3>
 
 		<p>The best tool for dynamically building html when the user scrolls is called jQuery. </p>
 		<p>Back in the day (say until 2015) jQuery was widely used for building web interfaces. Since then, most of jQuery's uses have been replaced by platforms like React. But some cases, such as dynamically building html from an existing page, are better suited to jQuery. When React was young, there were a lot of questions like "how do I get my existing jQuery to work in React", and the answer was usually that there was a better "React" way of doing it. The minitoc is an exception.</p>
