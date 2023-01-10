@@ -3,66 +3,62 @@ import React, { useEffect, useState } from 'react'
 import './minitoc.css'
 import $ from 'jquery'
 
-export const MiniToc = (
-	 levelsToShow = 5, // in the toc show headers h1, h2, h3, h4
-	 widthInPageForToc = 250, // if there's any table or image 250px from the right edge, hide the ToC)
-	 tagsToHideToc = "'table', 'tr', 'td', 'th', 'tbody', 'thead', 'img'" // hide the toc if one of these elements appears
-) => {
+export const MiniToc = ({
+  levelsToShow = 5, // in the toc show headers h1, h2, h3, h4, h5
+  widthInPageForToc = 250, // if there's any table or image 250+10=260px from the right edge, hide the ToC. Width of ToC will be 250-20=230)
+  tagsToHideToc = ['table', 'tr', 'td', 'th', 'tbody', 'thead', 'img'] // hide the toc if one of these elements appears
+}) => {
+  // NAMING CONVENTIONS
   // state variables end in "_" (underscore), state edit functions end in "_set"
   const [folded_, folded_set] = useState(false)
 
   useEffect(() => {
-    // in jQuery: jQuery elements start with "$"
+    // NAMING CONVENTIONS
+    // in jQuery: variables representing jQuery elements start with "$"
     // variables starting with "$page" represent elements from the page
     // varialbes starting with "$toc" represent element from the ToC
-	const docViewTop = () => $(window).scrollTop()
-	const windowHeight = () => $(window).height()
-	const docViewBottom = () => $(window).scrollTop() + $(window).height()
-
-
+    const docViewTop = () => $(window).scrollTop()
+    const windowHeight = () => $(window).height()
+    const docViewBottom = () => $(window).scrollTop() + $(window).height()
 
     $(() => {
-            // hides ToC elements H3 and above for page elements not in view of the reader
-			$(window).on('scroll', () => {
-				const d = new Date();
-				console.log("AAAAAAAAAAAAAA", d.getTime())
-				// console.log("ZZZZZZZZZZZZZ")
-				hideAllOrPartOfToc()
-			  })
-		const levelsToShow = 5 // in the toc show headers h1, h2, h3, h4
-		const widthInPageForToc = 250 // if there's any table or image 250px from the right edge, hide the ToC)
-		const tagsToHideToc = ['table', 'tr', 'td', 'th', 'tbody', 'thead', 'img'] // hide the toc if one of these elements appears
-	  
-		// headersSelector(2,4) returns "h2,h3,h4"
-		// levelsToShow headersSelector
-		const headersSelector = () => {
-			console.log('HHHHHHHHHHHHHHHHHH')
-			console.log('levelsToShow', levelsToShow)
-			let arr = []
-			console.log('levelsToShow', levelsToShow)
-			for (let i=0; i<levelsToShow+1; i++)
-				{
-					console.log('i', i)
-					let h = 'h'+i
-					arr.push(h)
-				}
-			const ret = arr.join(',')
-			console.log('headersSelector()', ret)
-			return ret
-		  }
-		  const headersSelector2 = () => {
-			let arr = []
-			console.log('levelsToShow', levelsToShow)
-			for (let i=3; i<levelsToShow+1; i++)
-				{
-					console.log('i', i)
-					let h = 'h'+i
-					arr.push(h)
-				}
-			const ret = arr.join(',')
-			console.log('headersSelector()', ret)
-			return ret
-		  }
+      // retrieve react parameters from invisible html tags (see JSX components in component's "render" return)
+      const levelsToShow = Number($('#levelsToShow').text()) // in the toc show headers h1, h2, h3, h4
+      const widthInPageForToc = Number($('#widthInPageForToc').text()) // if there's any table or image 250px from the right edge, hide the ToC)
+      const tagsToHideToc = eval($('#tagsToHideToc').text()) // hide the toc if one of these elements appears
+      // hides ToC elements H3 and above for page elements not in view of the reader
+      $(window).on('scroll', () => {
+        const d = new Date()
+        console.log('AAAAAAAAAAAAAA', d.getTime())
+        // console.log("ZZZZZZZZZZZZZ")
+        hideAllOrPartOfToc()
+      })
+
+      const headersSelector = () => {
+        console.log('HHHHHHHHHHHHHHHHHH')
+        console.log('levelsToShow', levelsToShow)
+        let arr = []
+        for (let i = 0; i < levelsToShow + 1; i++) {
+          console.log('i', i)
+          let h = 'h' + i
+          arr.push(h)
+        }
+        const ret = arr.join(',')
+        console.log('headersSelector()', ret)
+        return ret
+      }
+      const headersSelector2 = () => {
+        let arr = []
+        console.log('levelsToShow', levelsToShow)
+        for (let i = 3; i < levelsToShow + 1; i++) {
+          console.log('i', i)
+          let h = 'h' + i
+          arr.push(h)
+        }
+        const ret = arr.join(',')
+        console.log('headersSelector()', ret)
+        return ret
+      }
 
       // console.log('docViewBottom=', docViewBottom)
       const pageWidth = $('#root')[0].offsetWidth
@@ -74,14 +70,16 @@ export const MiniToc = (
         console.log('===========================')
         // scan the page displayed in the browser (apparent to the user) from top to bottom
         for (let y = 0; y < windowHeight(); y = y + 10) {
-          const domElemRight = document.elementFromPoint(pageWidth - widthInPageForToc, y)
+          const domElemRight = document.elementFromPoint(
+            pageWidth - widthInPageForToc,
+            y
+          )
 
           if (domElemRight) {
             // console.log("domElemRight=", domElemRight, 'y=',y,)
 
             const rightTagName = domElemRight.tagName.toLowerCase()
-            if (tagsToHideToc.includes(rightTagName))
-              ret = true
+            if (tagsToHideToc.includes(rightTagName)) ret = true
             console.log('rightTagName', rightTagName)
           }
         }
@@ -92,16 +90,15 @@ export const MiniToc = (
         // // console.log(domElemTopRight)
         // const topRightTagName = domElemTopRight.tagName.toLowerCase()
         // const bottomRightTagName = domElemBottomRight.tagName.toLowerCase()
-		return ret
-
+        return ret
       }
-	  // initial build of the ToC
+      // initial build of the ToC
       const buildToc = () => {
         let headerLevel_old = 0
         let $tocItem_root = $('#minitoc_root')
         // headerPath is an array of jQuery elements from the ToC giving the path to the currently processed header from the page
         let headerPath = [$tocItem_root]
-		let selectors = headersSelector() // by default, "h1,h2,h3,h4"
+        let selectors = headersSelector() // by default, "h1,h2,h3,h4"
         $('#content')
           .find(selectors)
           .each(function () {
@@ -150,52 +147,57 @@ export const MiniToc = (
           })
       }
 
-	  // selectively hide part of the ToC
+      // selectively hide part of the ToC
       const hideTocElems = () => {
-		let selectors = headersSelector2() // by default, "h3,h4"
+        let selectors = headersSelector2() // by default, "h3,h4"
         $('#content')
           .find(selectors)
-          .each(function ()  {
+          .each(function () {
             const domPageElem = $(this)[0]
-			const offsetTop = this.offsetTop
-			const $pageElem = $(this)
+            const offsetTop = this.offsetTop
+            const $pageElem = $(this)
             // console.log('domPageElem', domPageElem)
             const pageElemId = domPageElem['id']
-			const $tocElem = $('[href="#' + pageElemId + '"]')
+            const $tocElem = $('[href="#' + pageElemId + '"]')
             // console.log('$tocElem=', $tocElem)
             $tocElem.parent().addClass('outOfView')
-              //	console.log("domPageElem=", domPageElem)
-              
-              // console.log($tocElem);
-              if (offsetTop > docViewBottom() || offsetTop < docViewTop()) {
-				console.log(pageElemId, offsetTop)
-                $($tocElem).parent().addClass('outOfView')
-              } else {
-                $($tocElem).parent().removeClass('outOfView')
-				$($tocElem).parentsUntil("div").removeClass('outOfView')
-              }
-          })
+            //	console.log("domPageElem=", domPageElem)
 
+            // console.log($tocElem);
+            if (
+              offsetTop > $(window).scrollTop() + $(window).height() ||
+              offsetTop < $(window).scrollTop()
+            ) {
+              console.log(pageElemId, offsetTop)
+              $($tocElem)
+                .parent()
+                .addClass('outOfView')
+            } else {
+              $($tocElem)
+                .parent()
+                .removeClass('outOfView')
+              $($tocElem)
+                .parentsUntil('div')
+                .removeClass('outOfView')
+            }
+          })
       }
 
-	  // hide all or part of the toc
-	  const hideAllOrPartOfToc = () => {
-		console.log ('scroll ====================================')
-		if (somethingClashWithToC()) {
-			// hide all the ToC
-			$('#minitoc').hide()
-		  } 
-		  else {
-			$('#minitoc').show()
-			hideTocElems()
-		}
-	  }
+      // hide all or part of the toc
+      const hideAllOrPartOfToc = () => {
+        console.log('scroll ====================================')
+        if (somethingClashWithToC()) {
+          // hide all the ToC
+          $('#minitoc').hide()
+        } else {
+          $('#minitoc').show()
+          hideTocElems()
+        }
+      }
 
-	  // do the following on load
+      // do the following on load
       buildToc()
-	  hideAllOrPartOfToc()
-      
-
+      hideAllOrPartOfToc()
     })
   }, [])
 
@@ -230,16 +232,21 @@ export const MiniToc = (
     else return '⇱'
   }
 
-
-
   return (
-    <div id='minitoc' className={foldedOrNotCSS()}>
-	<p id="levelsToShow" className='passValueFromReactToJquery'>{levelsToShow.toString()}</p>  
-	<p id="widthInPageForToc" className='passValueFromReactToJquery'>{widthInPageForToc.toString()}</p> 
-	<p id="tagsToHideToc" className='passValueFromReactToJquery'>{tagsToHideToc.toString()}</p>
-	
-
-
+    <div
+      id='minitoc'
+      className={foldedOrNotCSS()}
+      style={{ width: widthInPageForToc - 20 }}
+    >
+      <p id='levelsToShow' className='passValueFromReactToJquery'>
+        {levelsToShow}
+      </p>
+      <p id='widthInPageForToc' className='passValueFromReactToJquery'>
+        {widthInPageForToc}
+      </p>
+      <p id='tagsToHideToc' className='passValueFromReactToJquery'>
+        [{tagsToHideToc.map(tag => `"${tag}",`)}]
+      </p>
       <p onClick={handleOpenClose}>In this page: {openCloseIcon()}</p>
 
       <div id='minitoc_root'></div>

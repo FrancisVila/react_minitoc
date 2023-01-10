@@ -1,19 +1,40 @@
 // add following line if new file
 import React from 'react'
 
+import bigPicture from './bigPicture.png'
+
 export const Page1 = () => {
   return (
     <div id='content'>
 
 <h1 id="aaaa">Scroll down to view effect on ToC</h1>
       <p>Click on "In this page" to hide the ToC</p>
-      <p>
-        <b>===&gt; Note:</b> ToC appears <b>twice</b> here, because here we are
-        in development mode. Once the component is built, it only appears once.
-        See
-        <a href="https://stackoverflow.com/questions/72238175/why-useeffect-running-twice-and-how-to-handle-it-well-in-react">
+	  <h2>FAQ</h2>
+    <ul>
+		<li>
+		<b>Why does the ToC appear twice</b>?<br/>
+        If you see the ToC appear <b>twice</b> here, it is because here you are viewing it in development mode. Once the component is built, it only appears once.
+        See -
+        <a href="https://stackoverflow.com/questions/72238175/why-useeffect-running-twice-and-how-to-handle-it-well-in-react"> 
           this StackOverflow answer
-        </a>
+        </a> -
+        for an explanation of the phenomenon.
+		</li>
+		<li>
+		<b>How about the problem of wide tables and images?</b><br/>
+        <b>Scroll downwards</b>, you will see that the ToC seamlessly disappears when a wide table or image appears.
+		</li>
+		<li>
+		<b>How does the ToC react to scrolling?</b><br/>
+        .
+		</li>
+	</ul>
+	  <p><b>Why does the ToC appear twice</b>?<br/>
+        If you see the ToC appear <b>twice</b> here, it is because here you are viewing it in development mode. Once the component is built, it only appears once.
+        See -
+        <a href="https://stackoverflow.com/questions/72238175/why-useeffect-running-twice-and-how-to-handle-it-well-in-react"> 
+          this StackOverflow answer
+        </a> -
         for an explanation of the phenomenon.
       </p>
       <h2 id="bbbb">In anim </h2>
@@ -1050,7 +1071,7 @@ export const Page1 = () => {
       <h2>Cum salvum esse flentes</h2>
 
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Prioris generis est docilitas, memoria; Hoc tu nunc in illo probas. Duo Reges: constructio interrete. Et quod est munus, quod opus sapientiae? </p>
-
+<img src={bigPicture} alt="big picture" className='bigPicture' />
 <p>Sed virtutem ipsam inchoavit, nihil amplius. Sit enim idem caecus, debilis. Illud non continuo, ut aeque incontentae. Sin aliud quid voles, postea. Est, ut dicis, inquam. Efficiens dici potest. </p>
 
 <ul>
