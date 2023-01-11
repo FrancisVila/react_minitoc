@@ -1,18 +1,35 @@
 // add following line if new file
 import React from 'react'
-
 import bigPicture from './bigPicture.png'
+import './page.css'
+
 
 export const Page1 = () => {
   return (
     <div id='content'>
 
 <h1 id="aaaa">Mini ToC demo</h1>
-      <p>Click on "In this page" to hide the ToC </p>
+      
+	  <div className="warning " >
+   <span className="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"> </span>
+   <ol>
+	<li> <p><b>SCROLL DOWN</b> to see:</p>
+	<ul>
+	<li>The Mini ToC on the right <b>disappear</b> when it might clash with a wide table or image	</li>
+	<li>The titles in the Mini ToC fold or unfold as headers move in or out of the visible window	</li>
+	</ul>
+	</li>
+	<li>
+	<p>Click on "<b>In this page</b>" above the Mini ToC to minimize/maximize it </p>
+	</li>
+	</ol>
+  </div>
 	  <h2>FAQ</h2>
 	  <h3>Q: What is this demo trying to prove?</h3>
 	  <p>This demo shows a React component that builds a table of contents of a page. The component is compatible with any React-based site containing html headers and some space to the right. More specifically, Zoomin can drop it into the React code of the Axway doc portal (introduced in November 2022).</p>
 	  <p>You can view the source code of the minitoc React component <a href="https://codesandbox.io/s/live-retractable-toc-for-documentation-g4zv99?file=/src/components/minitoc.js">on this codesandbox</a>. It is pushed to a github repo here:  <a href="https://github.com/FrancisVila/react_minitoc">https://github.com/FrancisVila/react_minitoc</a>	  </p>
+	  <h3>Q: Why are minitocs important?</h3>
+		<p>Mini ToCs are important because they mean longer pages are viable. Longer pages means less pages, information is less spread out. Users need to do less navigation. Less navigation means less hassle.</p>
 	  <h3>Q: How about the problem of wide tables and images?</h3>
         <p><b>Scroll downwards</b>, you will see that the ToC seamlessly disappears when a wide table or image appears.</p>
 		<h3>Q: I see the ToC twice, WTF?</h3>
@@ -29,8 +46,6 @@ export const Page1 = () => {
 		For example, if a single h4 is visible, you will see [all h1] + [all h2] + the [h3] parent of the visible h4, plus the [h4] itself. </p>
 		<p>Feel free to express any views you might have about this.</p>
 
-		<h3>Q: Why are minitocs important?</h3>
-		<p>Mini ToCs are important because they mean longer pages are viable. Information is less spread out. Users need to do less navigation. Less navigation means less hassle.</p>
 		<h3>Q: What did Zoomin mean about compatibility problems between the ToC and React?</h3>
 
 		<p>The best tool for dynamically building html when the user scrolls is called jQuery. </p>
@@ -43,15 +58,8 @@ export const Page1 = () => {
 
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facete M. Utilitatis causa amicitia est quaesita. Videsne, ut haec concinant? Aliter enim explicari, quod quaeritur, non potest. Quare ad ea primum, si videtur; </p>
 
-<h3>Ab his oratores, ab his imperatores</h3>
-
-<p>Peccata paria. Respondeat totidem verbis. Aliter enim nosmet ipsos nosse non possumus. Ne discipulum abducam, times. Vestri haec verecundius, illi fortasse constantius. Quod vestri non item. </p>
-
-<p>Quid sequatur, quid repugnet, vident. Suo enim quisque studio maxime ducitur. Contemnit enim disserendi elegantiam, confuse loquitur. Hos contra singulos dici est melius. </p>
-
-<p><mark>Sed ego in hoc resisto;</mark> Quae diligentissime contra Aristonem dicuntur a Chryippo. Quoniam, si dis placet, ab Epicuro loqui discimus. </p>
-
-<h2>Big table</h2>
+<h2>&gt;&gt;&gt;&gt; Big table (click in ToC: disappears!)</h2>
+<div className='warning'><p>When this big table appears, the mini Toc disappears to avoid clashes</p></div>
 	  <table>
 		<tr>
 		<td>
@@ -801,6 +809,14 @@ export const Page1 = () => {
 		</td>
 		</tr>
 	  </table>
+<h3>Ab his oratores, ab his imperatores</h3>
+
+<p>Peccata paria. Respondeat totidem verbis. Aliter enim nosmet ipsos nosse non possumus. Ne discipulum abducam, times. Vestri haec verecundius, illi fortasse constantius. Quod vestri non item. </p>
+
+<p>Quid sequatur, quid repugnet, vident. Suo enim quisque studio maxime ducitur. Contemnit enim disserendi elegantiam, confuse loquitur. Hos contra singulos dici est melius. </p>
+
+<p><mark>Sed ego in hoc resisto;</mark> Quae diligentissime contra Aristonem dicuntur a Chryippo. Quoniam, si dis placet, ab Epicuro loqui discimus. </p>
+
 	  
 	  <p><b>Quam ob rem tandem, inquit, non satisfacit?</b> Tu enim ista lenius, hic Stoicorum more nos vexat. Iam id ipsum absurdum, maximum malum neglegi. Refert tamen, quo modo. </p>
 
@@ -827,6 +843,7 @@ export const Page1 = () => {
         Header with no id that is long long header long long long long long long long long
         long long long long long long long long long long long long{' '}
       </h3>
+	  <div className='warning'><p>If you are scrolling down: the big table is past, the mini Toc reappears</p></div>
       <p>
         Sunt laborum id laboris aute magna aliqua amet amet cillum occaecat.
         Magna irure enim reprehenderit minim aute aliquip nisi dolor sit. Culpa
@@ -860,7 +877,9 @@ export const Page1 = () => {
 	<li>Quod non faceret, si in voluptate summum bonum poneret.</li>
 	<li>Consequens enim est et post oritur, ut dixi.</li>
 </ul>
-
+	  <h2>&gt;&gt;&gt;&gt;&gt; Big Image</h2>
+	  <div className='warning'><p>When this big image appears, the mini Toc disappears to avoid clashes</p></div>
+	  <img src={bigPicture} alt="big picture" className='bigPicture' />
 
 <p>Sed ad bona praeterita redeamus. Si longus, levis; Hos contra singulos dici est melius. Satis est ad hoc responsum. Nescio quo modo praetervolavit oratio. </p>
 
@@ -970,12 +989,13 @@ export const Page1 = () => {
         quis excepteur nulla sunt et. Id aliquip ex laborum duis et magna velit.
       </p>
       <h3 id='ggg'>Sub sub Title </h3>
+
       <p>
         In anim irure elit sit officia cillum quis culpa sunt aliqua do. Ex
         fugiat mollit voluptate dolore consequat Lorem aliquip consequat
         voluptate irure consectetur commodo Lorem veniam. Ipsum do proident sit
         anim qui magna culpa cupidatat qui enim anim duis.
-      </p><img src={bigPicture} alt="big picture" className='bigPicture' />
+      </p>
       <p>
         Sunt cupidatat labore ipsum sint eu minim sunt mollit pariatur magna
         exercitation. Ullamco proident enim aliqua voluptate adipisicing. Irure

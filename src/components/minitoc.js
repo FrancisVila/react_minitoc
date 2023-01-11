@@ -291,7 +291,7 @@ export const MiniToc = ({
       </p>
 	  
 	  
-      <p onClick={handleOpenClose}>In this page: {openCloseIcon()}</p>
+      <p title="click here to fold/unfold the mini table of contents" onClick={handleOpenClose} className="inThisPage">In this page: <span className='openCloseIcon'>&nbsp;{openCloseIcon()}&nbsp;</span></p>
 
       <div id='minitoc_root'></div>
     </div>

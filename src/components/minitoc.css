@@ -1,5 +1,5 @@
 
-.minitoc.folded {
+.minitoc.folded p {
 	transform: rotate(90deg);
 	transform-origin: left top;
 	padding: 0;
@@ -11,10 +11,14 @@
 }
 
 .minitoc.folded p {
-	line-height: 0;
-	padding-left: 3px;
-	padding-right: 3px;
+	padding-left: 20px;
+	padding-right: 10px;
 	
+}
+
+#minitoc.folded p.inThisPage {
+	background-color: #016580;
+color:#fff;
 }
 
 
@@ -38,9 +42,9 @@
 }
 
 .minitoc a {
-	color: #333;
+	color: #fff;
 	text-decoration: none;
-	font-size: 10px;
+	font-size: 12px;
 }
 .minitoc li {
 	list-style-type: none; 
@@ -49,11 +53,6 @@
 .minitoc a:hover {
 	text-decoration: underline;
 }
-
-.outOfView {display:none}
-
-/* using this to pass values from react to jquery */
-.passValueFromReactToJquery {display:none} 
 #minitoc_root  ul {padding-left:20px}
 
 #minitoc_root > ul {padding-left:0}
@@ -61,5 +60,50 @@
 #minitoc li {
 	margin-bottom: 4px;
 	margin-top: 4px;
-	line-height: 10px;
+	line-height: 12px;
 }
+.outOfView {display:none}
+
+/* using this to pass values from react to jquery */
+.passValueFromReactToJquery {display:none} 
+
+
+#minitoc.folded div#minitoc_root {
+	display:none;
+}
+
+
+
+#minitoc span.openCloseIcon {
+	background-color: #016580;
+color:#fff;
+border-radius:50%;
+line-height: 0;
+} 
+
+#minitoc p.inThisPage {
+	text-align: right;
+	line-height:0;
+	} 
+
+#minitoc.folded p.inThisPage {
+text-align: left;
+line-height:24px;
+} 
+
+#minitoc.folded span.openCloseIcon {
+	background-color: #fff;
+	color:#016580;
+	border-radius:50%;
+	line-height: 0;
+} 
+
+#minitoc_root > ul 
+{
+/* background-color: #f3ece3; */
+background-color: #016580;
+color:#fff;
+border: 1px solid #CCC;
+padding: 3px; }
+
+
