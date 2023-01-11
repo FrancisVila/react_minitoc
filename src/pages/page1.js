@@ -15,8 +15,8 @@ export const Page1 = () => {
    <ol>
 	<li> <p><b>SCROLL DOWN</b> to see:</p>
 	<ul>
-	<li>The Mini ToC on the right <b>disappear</b> when it might clash with a wide table or image	</li>
-	<li>The titles in the Mini ToC fold or unfold as headers move in or out of the visible window	</li>
+	<li>The Mini ToC on the right <b>disappear</b> when it might clash with a wide table or image..	</li>
+	<li>The titles in the Mini ToC fold or unfold as headers move in or out of the visible window..	</li>
 	</ul>
 	</li>
 	<li>
