@@ -48,7 +48,7 @@ export const Page1 = () => {
 			</p>
 			<p>
 				You can view the source code of the minitoc React component{' '}
-				<a href='https://codesandbox.io/s/live-retractable-toc-for-documentation-g4zv99?file=/src/components/minitoc.js'>
+				<a href='https://codesandbox.io/s/live-retractable-toc-for-documentation-g4zv99?file=/src/components/Minitoc.js'>
 					on this codesandbox
 				</a>
 				. It is pushed to a github repo here:{' '}
