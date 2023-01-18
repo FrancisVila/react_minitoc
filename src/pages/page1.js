@@ -31,7 +31,7 @@ export const Page1 = () => {
 					</li>
 					<li>
 						<p>
-							Click on "<b>In this page</b>" above the Mini ToC to
+							Click on &quot;<b>In this page</b>&quot; above the Mini ToC to
 							minimize/maximize it{' '}
 						</p>
 					</li>
@@ -104,12 +104,12 @@ export const Page1 = () => {
 			</p>
 			<p>
 				Back in the day (say until 2015) jQuery was widely used for building web
-				interfaces. Since then, most of jQuery's uses have been replaced by
+				interfaces. Since then, most of jQuery&apos;s uses have been replaced by
 				platforms like React. But some cases, such as dynamically building html
 				from an existing page, are better suited to jQuery. When React was
-				young, there were a lot of questions like "how do I get my existing
-				jQuery to work in React", and the answer was usually that there was a
-				better "React" way of doing it. The minitoc is an exception.
+				young, there were a lot of questions like &quot;how do I get my existing
+				jQuery to work in React&quot;, and the answer was usually that there was a
+				better &quot;React&quot; way of doing it. The minitoc is an exception.
 			</p>
 			<p>
 				Getting jQuery to work with React is a bit tricky -despite them both

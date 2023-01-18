@@ -81,7 +81,7 @@ export const MiniToc = props => {
 			// initial build of the ToC
 			const buildToc = () => {
 				let headerLevel_old = 0
-				let $tocItem_root = $('#minitoc_root')
+				let $tocItem_root = $('#minitocRoot')
 				// headerPath is an array of jQuery elements from the ToC giving the path to the currently processed header from the page
 				let headerPath = [$tocItem_root]
 				let selectors = headersSelector() // by default, "h1,h2,h3,h4"
@@ -275,6 +275,7 @@ export const MiniToc = props => {
 
 			{/* The "In this page" header of the minitoc, where the user clicks to fold/unfold  */}
 			<p
+				id="clickMe"
 				title='click here to fold/unfold the mini table of contents'
 				onClick={handleOpenClose}
 				className='inThisPage'
@@ -284,7 +285,7 @@ export const MiniToc = props => {
 			</p>
 
 			{/* This is where the minitoc is going to build  */}
-			<div id='minitoc_root' title='minitoc root' style={{ display: folded_ ? 'none' : 'block' }}></div>
+			<div id='minitocRoot' title='minitoc root' style={{ display: folded_ ? 'none' : 'block' }}></div>
 		</div>
 	)
 }

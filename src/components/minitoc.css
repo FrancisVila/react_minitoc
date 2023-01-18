@@ -53,9 +53,9 @@ color:#fff;
 .minitoc a:hover {
 	text-decoration: underline;
 }
-#minitoc_root  ul {padding-left:20px}
+#minitocRoot  ul {padding-left:20px}
 
-#minitoc_root > ul {padding-left:0}
+#minitocRoot > ul {padding-left:0}
 
 #minitoc li {
 	margin-bottom: 4px;
@@ -68,7 +68,7 @@ color:#fff;
 .passValueFromReactToJquery {display:none} 
 
 
-#minitoc.folded div#minitoc_root {
+#minitoc.folded div#minitocRoot {
 	display:none;
 }
 
@@ -98,7 +98,7 @@ line-height:24px;
 	line-height: 0;
 } 
 
-#minitoc_root > ul 
+#minitocRoot > ul 
 {
 /* background-color: #f3ece3; */
 background-color: #016580;
