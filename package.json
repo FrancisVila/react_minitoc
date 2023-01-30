@@ -2,6 +2,7 @@
 	"type": "module",
 	"name": "react-local-table-of-contents",
 	"version": "0.1.0",
+	"author": "Francis Vila fvila789@gmail.com",
 	"homepage": ".",
 	"private": false,
 	"dependencies": {
