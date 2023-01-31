@@ -1,5 +1,5 @@
 import './App.css'
-import Page1 from './pages/Page1.js'
+import Page1 from './pages/page1.js'
 import MiniToc from './components/Minitoc.js'
 import React from 'react'
 
