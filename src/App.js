@@ -1,6 +1,6 @@
 import './App.css'
 import Page1 from './pages/page1.js'
-import MiniToc from './components/Minitoc.js'
+import MiniToc from './components/minitoc.js'
 import React from 'react'
 
 function App() {
